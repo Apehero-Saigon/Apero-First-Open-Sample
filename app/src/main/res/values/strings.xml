@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">AperoSG First Open</string>
+    <string name="facebook_app_id">facebook_app_id</string>
+    <string name="facebook_client_token">facebook_client_token</string>
+    <string name="welcome_title">Welcome to Apero First Open library</string>
+    <string name="welcome_checkbox_title">I understand how to use the library</string>
+    <string name="please_check_the_checkbox">Please check the checkbox</string>
+    <string name="next">Next</string>
+</resources>
