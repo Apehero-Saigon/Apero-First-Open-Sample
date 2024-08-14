@@ -29,9 +29,5 @@ val onboardConfig = AperoOnboardUiConfig(
     backgroundColor = yourBackgroundColor,
     // Declared pages config, up to 4 configs for 4 pages
     pages = listOf(onboard1Config, onboard2Config, onboard3Config, onboard4Config),
-    // Enable auto scroll
-    autoScroll = false,
-    // Delay before auto scroll start in each page (in milliseconds)
-    autoScrollInterval = 2000L,
 )
 ```

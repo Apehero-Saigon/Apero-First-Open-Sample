@@ -16,7 +16,7 @@ import apero.aperosg.firstopen.model.Language
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class FirstOpenActivity : AppCompatActivity() {
+class FirstOpenWithSplashInitializationActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,44 +36,22 @@ class FirstOpenActivity : AppCompatActivity() {
 
             override fun onFinished() {
                 // Go to next screen
-                startActivity((Intent(this@FirstOpenActivity, MainActivity::class.java)))
+                startActivity((Intent(this@FirstOpenWithSplashInitializationActivity, MainActivity::class.java)))
                 finish()
             }
         }
 
         // Set up ads config
         val adsConfig = AperoFOAdsConfig.Builder()
-            // Set inter splash ads
             .setInterSplashHighId(BuildConfig.inter_splash_high)
             .setInterSplashId(BuildConfig.inter_splash)
-            // Set banner splash
             .setBannerSplashId(BuildConfig.banner_splash)
-            // Set native language
-            .setNativeLanguageHighId(BuildConfig.native_language_high)
-            .setNativeLanguageId(BuildConfig.native_language)
-            // Set native language dup
-            .setNativeLanguageDupHighId(BuildConfig.native_language_dup_high)
-            .setNativeLanguageDupId(BuildConfig.native_language_dup)
-            // Set native welcome
-            .setNativeWelcomeHighId(BuildConfig.native_welcome_high)
-            .setNativeWelcomeId(BuildConfig.native_welcome)
-            // Set native welcome dup
-            .setNativeWelcomeDupHighId(BuildConfig.native_welcome_dup_high)
-            .setNativeWelcomeDupId(BuildConfig.native_welcome_dup)
-            // Set native onboard
-            .setNativeOnboard1HighId(BuildConfig.native_onboard_1_high)
-            .setNativeOnboard1Id(BuildConfig.native_onboard_1)
-            .setNativeOnboard3HighId(BuildConfig.native_onboard_3_high)
-            .setNativeOnboard3Id(BuildConfig.native_onboard_3)
-            .setNativeOnboard4HighId(BuildConfig.native_onboard_4_high)
-            .setNativeOnboard4Id(BuildConfig.native_onboard_4)
-            .setNativeOnboardFullscreenHighId(BuildConfig.native_ob_fullscr_high)
             .build()
 
         // Set up Splash screen config
         val splashConfig = AperoSplashUiConfig.Builder()
-            //.setAppIconId(R.drawable.app_icon) // Uncomment this if use common splash screen
-            .setCustomSplashLayoutId(R.layout.layout_splash) // Comment this if use common splash screen
+            .setWaitForInitialization(true)
+            .setAppIconId(R.drawable.app_icon)
             .build()
 
         // Set up Language FO screen config
@@ -93,22 +71,15 @@ class FirstOpenActivity : AppCompatActivity() {
             .build()
 
         // Set up Onboard screens config
-        // Config for onboard screen 1
         val onboard1Config = AperoOnboardPageConfig(layoutOnboardContentId = R.layout.layout_onboard_1)
-        // Config for onboard screen 2
         val onboard2Config = AperoOnboardPageConfig(layoutOnboardContentId = R.layout.layout_onboard_2)
-        // Config for onboard screen 3
         val onboard3Config = AperoOnboardPageConfig(layoutOnboardContentId = R.layout.layout_onboard_3)
-        // Config for onboard screen 4
-        val onboard4Config = AperoOnboardPageConfig(layoutOnboardContentId = R.layout.layout_onboard_4)
-        // Combine config for onboard screens
-        val onboardConfig = AperoOnboardUiConfig(pages = listOf(onboard1Config, onboard2Config, onboard3Config, onboard4Config))
+        val onboardConfig = AperoOnboardUiConfig(pages = listOf(onboard1Config, onboard2Config, onboard3Config))
 
         // Assemble configs
         val config = AperoFOConfig.Builder()
             .setCallback(callback)
             .setAdsConfig(adsConfig)
-
             .setSplashUiConfig(splashConfig)
             .setLanguageUiConfig(languageConfig)
             .setOnboardUiConfig(onboardConfig)
@@ -116,5 +87,18 @@ class FirstOpenActivity : AppCompatActivity() {
 
         // Start first open flow
         AperoFO.startFlow(this, config)
+
+        // Call to start other splash initializations
+        initSplash()
+    }
+
+    private fun initSplash() {
+        lifecycleScope.launch {
+            // Do other initializations here
+            delay(5000) // TODO: delete this line
+
+            // After finish initialization, call this function to continue splash
+            AperoFO.finishSplashInitialization()
+        }
     }
 }

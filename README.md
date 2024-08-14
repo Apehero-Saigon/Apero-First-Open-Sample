@@ -35,7 +35,7 @@ implementation("apero.aperosg.firstopen:firstopen:1.0.0")
 1. [Structure](#structure)
 2. [Configure Splash screen](#configure-splash-screen)
 3. [Configure Language FO screen](#configure-language-screen)
-4. [Configure Welcome screen (Optional)](#configure-welcome-screen)
+4. [Configure Welcome screen (Optional)](#configure-welcome-screen-optional)
 5. [Configure Onboard screens](#configuring-onboard-screens)
 6. [Configure Ads](#configure-ads)
 7. [Start flow](#start-flow)
@@ -150,6 +150,16 @@ This step setups UI for splash screen, you can choose to use prebuilt Splash scr
   .build()
    ```
 
+## Additional initialization in Splash (Optional if you have other initializations)
+
+If you have any other initializations that needs to be done in Splash screen such as remote configs, follow these instructions:
+
+- Call ``.setWaitForInitialization(true)`` in SplashUiConfig Builder
+- Call ``AperoFO.startFlow()`` to start follow as usual
+- Start your initializations and call ``AperoFO.finishSplashInitialization()`` when you're done
+
+Sample file: [Source file](app/src/main/java/apero/aperosg/monetizationsample/FirstOpenWithSplashInitializationActivity.kt)
+
 ## Configure Language screen
 
 This step setups languages in Language screen, you provides list of languages to show in Language FO screen.
@@ -188,7 +198,7 @@ startActivity(Intent(context, LanguageSettingsActivity::class.java))
 
 You can also use your custom **Language Settings** screen but call ``AperoFO.setLanguage(languageCode)`` if you change language.
 
-## Configuring Welcome screen (Optional)
+## Configure Welcome screen (Optional)
 
 This step setups Welcome screen (screen between Language FO and Onboard).
 
@@ -291,8 +301,6 @@ objects into this configuration.
 |------------------------|------------------------------------------------------------------------------------------------|
 | **primaryColor**       | Color of the elements on onboarding screen such as indicators, next button, ads buttons        |
 | **backgroundColor**    | Background color of the onboarding screen                                                      |
-| **autoScroll**         | Enable or disable automatic scrolling. Default is false                                        |
-| **autoScrollInterval** | Set the delay time before auto-scrolling to the next page, in milliseconds, default is 2000ms. |
 
 ```kotlin
 val onboardConfig = AperoOnboardUiConfig(
