@@ -27,7 +27,7 @@ maven {
 Inside app module's build.gradle, add implementation for library:
 
 ```
-implementation("apero.aperosg.firstopen:firstopen:1.0.1")
+implementation("apero.aperosg.firstopen:firstopen:1.0.2-alpha01")
 ```
 
 # Table of Contents
@@ -47,6 +47,7 @@ implementation("apero.aperosg.firstopen:firstopen:1.0.1")
    ```xml
     <activity
         android:name=".FirstOpenActivity"
+        android:configChanges="locale|layoutDirection|orientation|screenLayout|uiMode|touchscreen|screenSize|smallestScreenSize"
         android:exported="true">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
@@ -54,6 +55,9 @@ implementation("apero.aperosg.firstopen:firstopen:1.0.1")
         </intent-filter>
     </activity>
    ```
+
+   **Important**: do not forget ``configChanges`` line, Activity on some devices is restarted after changing language and causing bugs.
+
 2. Inside FirstOpenActivity, start setting up flow and launch.
 
    Details: [Source file](app/src/main/java/apero/aperosg/monetizationsample/FirstOpenActivity.kt)
