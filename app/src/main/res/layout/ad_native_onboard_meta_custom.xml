@@ -36,7 +36,18 @@
 
             <TextView
                 android:id="@+id/ad_tag"
-                style="@style/AdsIcon"
+                android:layout_width="24dp"
+                android:layout_height="18dp"
+                android:layout_marginStart="4dp"
+                android:backgroundTint="@color/primary"
+                android:gravity="center"
+                app:strokeColor="@null"
+                android:minWidth="15dp"
+                android:minHeight="15dp"
+                android:paddingBottom="1dip"
+                android:text="Ad"
+                android:textColor="#FFFFFF"
+                android:textSize="11.0sp"
                 android:background="#FBB812" />
 
         </androidx.cardview.widget.CardView>

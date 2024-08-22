@@ -27,8 +27,19 @@
 
         <TextView
             android:id="@+id/ad_tag"
-            style="@style/AdsIcon"
+            android:layout_width="24dp"
+            android:layout_height="18dp"
             android:layout_marginStart="4dp"
+            android:background="@drawable/bg_round_5"
+            android:backgroundTint="@color/primary"
+            android:gravity="center"
+            app:strokeColor="@null"
+            android:minWidth="15dp"
+            android:minHeight="15dp"
+            android:paddingBottom="1dip"
+            android:text="Ad"
+            android:textColor="#FFFFFF"
+            android:textSize="11.0sp"
             app:layout_constraintBottom_toBottomOf="@id/ad_headline"
             app:layout_constraintStart_toEndOf="@id/ad_app_icon"
             app:layout_constraintTop_toTopOf="parent" />
