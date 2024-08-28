@@ -1,7 +1,9 @@
 package apero.aperosg.monetizationsample
 
+import android.content.ContextWrapper
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import android.widget.CheckBox
 import android.widget.Toast
@@ -16,6 +18,7 @@ import apero.aperosg.firstopen.app.AperoOnboardUiConfig
 import apero.aperosg.firstopen.app.AperoSplashUiConfig
 import apero.aperosg.firstopen.app.AperoWelcomeUiConfig
 import apero.aperosg.firstopen.model.Language
+import java.util.Locale
 
 class FirstOpenWelcomeXMLActivity: AppCompatActivity() {
 
@@ -95,7 +98,7 @@ class FirstOpenWelcomeXMLActivity: AppCompatActivity() {
 
         // Set up welcome screen (if exist)
         val welcomeConfig = AperoWelcomeUiConfig.Builder()
-            .setViewContent(setUpWelcomeScreen())
+            .setViewContentProvider { setUpWelcomeScreen() }
             .build()
 
         // Set up Onboard screens config
@@ -127,7 +130,11 @@ class FirstOpenWelcomeXMLActivity: AppCompatActivity() {
     /** Set up custom welcome screen content
      * Provide your own logic here, this is a sample code */
     private fun setUpWelcomeScreen(): View {
-        val welcomeScreenView = layoutInflater.inflate(R.layout.layout_welcome_scr, null, false)
+        // Set up localized context for welcome screen to enable translation
+        val localizedConfig = resources.configuration.apply { setLocale(Locale.getDefault()) }
+        val localizedContext = ContextWrapper(this).createConfigurationContext(localizedConfig)
+
+        val welcomeScreenView = LayoutInflater.from(localizedContext).inflate(R.layout.layout_welcome_scr, null, false)
         val checkbox = welcomeScreenView.findViewById<CheckBox>(R.id.checkbox)
         val nextButton = welcomeScreenView.findViewById<View>(R.id.button)
         checkbox.setOnClickListener {

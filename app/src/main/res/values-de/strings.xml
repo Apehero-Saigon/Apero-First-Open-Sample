@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="welcome_title">Willkommen in der Apero First Open Library</string>
+    <string name="welcome_checkbox_title">Ich verstehe, wie man die Bibliothek benutzt</string>
+    <string name="please_check_the_checkbox">Bitte markieren Sie das Kontrollkästchen</string>
+    <string name="next">Weiter</string>
+</resources>

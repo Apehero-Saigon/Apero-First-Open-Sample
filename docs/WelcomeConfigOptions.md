@@ -9,7 +9,7 @@ val welcomeConfig = AperoWelcomeUiConfig.Builder()
     .setPrimaryColor(yourPrimaryColor)
 
     // Set welcome screen layout with View
-    .setViewContent(/* View here */)
+    .setViewContentProvider{ /* View here */ }
 
     // Set welcome screen layout with Composable
     .setComposeContent(/* Composable here */)
