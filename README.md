@@ -27,7 +27,7 @@ maven {
 Inside app module's build.gradle, add implementation for library:
 
 ```
-implementation("apero.aperosg.firstopen:firstopen:1.0.2-alpha05")
+implementation("apero.aperosg.firstopen:firstopen:1.0.3")
 ```
 
 # Table of Contents
@@ -56,7 +56,7 @@ implementation("apero.aperosg.firstopen:firstopen:1.0.2-alpha05")
     </activity>
    ```
 
-   **Important**: do not forget ``configChanges`` line, Activity on some devices is restarted after changing language and causing bugs.
+   **Important: do not forget ``configChanges`` line, Activity on some devices is restarted after changing language and causing bugs.**
 
 2. Inside FirstOpenActivity, start setting up flow and launch.
 
@@ -219,7 +219,7 @@ Refer to file [Source file](app/src/main/java/apero/aperosg/monetizationsample/F
 private fun setupFirstOpenFlow() {
     //...
     val welcomeConfig = AperoWelcomeUiConfig.Builder()
-        .setViewContent(setUpWelcomeScreen())
+        .setViewContentProvider { setUpWelcomeScreen() }
         .build()
     //...
 }
