@@ -3,13 +3,15 @@ Apero First Open Library Sample
 
 This is a repository for demonstrating how to use Apero First Open Library.
 
-Apero First Open Library takes care of showing Splash Ads and first open flow (Language FO, Onboard...)
+Apero First Open Library takes care of showing Splash Ads and first open flow (Language FO,
+Onboard...)
 
 ## Requirements (Skip this if already done)
 
 ### Set up Apero Ads Module: Follow the setup steps in [Setup Guide](docs/SetupSDK.md)
 
-To run this sample project, open ``settings.gradle.kts`` in the root of project and provide given ``username`` and ``password`` inside ``credentials``
+To run this sample project, open ``settings.gradle.kts`` in the root of project and provide
+given ``username`` and ``password`` inside ``credentials``
 block.
 
 ```kotlin
@@ -27,7 +29,7 @@ maven {
 Inside app module's build.gradle, add implementation for library:
 
 ```
-implementation("apero.aperosg.firstopen:firstopen:1.0.3")
+implementation("apero.aperosg.firstopen:firstopen:1.0.4-alpha10")
 ```
 
 # Table of Contents
@@ -56,7 +58,8 @@ implementation("apero.aperosg.firstopen:firstopen:1.0.3")
     </activity>
    ```
 
-   **Important: do not forget ``configChanges`` line, Activity on some devices is restarted after changing language and causing bugs.**
+   **Important: do not forget ``configChanges`` line, Activity on some devices is restarted after
+   changing language and causing bugs.**
 
 2. Inside FirstOpenActivity, start setting up flow and launch.
 
@@ -139,7 +142,8 @@ implementation("apero.aperosg.firstopen:firstopen:1.0.3")
 
 Full config options: [Documentation](docs/SplashConfigOptions.md)
 
-This step setups UI for splash screen, you can choose to use prebuilt Splash screen or provide your own layout
+This step setups UI for splash screen, you can choose to use prebuilt Splash screen or provide your
+own layout
 
 - Use prebuilt splash screen:
    ```kotlin
@@ -156,17 +160,20 @@ This step setups UI for splash screen, you can choose to use prebuilt Splash scr
 
 ## Additional initialization in Splash (Optional if you have other initializations)
 
-If you have any other initializations that needs to be done in Splash screen such as remote configs, follow these instructions:
+If you have any other initializations that needs to be done in Splash screen such as remote configs,
+follow these instructions:
 
 - Call ``.setWaitForInitialization(true)`` in SplashUiConfig Builder
 - Call ``AperoFO.startFlow()`` to start follow as usual
 - Start your initializations and call ``AperoFO.finishSplashInitialization()`` when you're done
 
-Sample file: [Source file](app/src/main/java/apero/aperosg/monetizationsample/FirstOpenWithSplashInitializationActivity.kt)
+Sample
+file: [Source file](app/src/main/java/apero/aperosg/monetizationsample/FirstOpenWithSplashInitializationActivity.kt)
 
 ## Configure Language screen
 
-This step setups languages in Language screen, you provides list of languages to show in Language FO screen.
+This step setups languages in Language screen, you provides list of languages to show in Language FO
+screen.
 
 Full config options: [Documentation](docs/LanguageConfigOptions.md)
 
@@ -200,7 +207,8 @@ To launch Language Settings screen:
 startActivity(Intent(context, LanguageSettingsActivity::class.java))
 ```
 
-You can also use your custom **Language Settings** screen but call ``AperoFO.setLanguage(languageCode)`` if you change language.
+You can also use your custom **Language Settings** screen but
+call ``AperoFO.setLanguage(languageCode)`` if you change language.
 
 ## Configure Welcome screen (Optional)
 
@@ -213,7 +221,8 @@ Full config options: [Documentation](docs/WelcomeConfigOptions.md)
 
 ### Using XML:
 
-Refer to file [Source file](app/src/main/java/apero/aperosg/monetizationsample/FirstOpenWelcomeXMLActivity.kt)
+Refer to
+file [Source file](app/src/main/java/apero/aperosg/monetizationsample/FirstOpenWelcomeXMLActivity.kt)
 
 ```kotlin
 private fun setupFirstOpenFlow() {
@@ -233,7 +242,8 @@ private fun setUpWelcomeScreen(): View {
 
 ### Using Jetpack Compose:
 
-Refer to file [Source file](app/src/main/java/apero/aperosg/monetizationsample/FirstOpenWelcomeComposeActivity.kt)
+Refer to
+file [Source file](app/src/main/java/apero/aperosg/monetizationsample/FirstOpenWelcomeComposeActivity.kt)
 
 ```kotlin
 private fun setupFirstOpenFlow() {
@@ -253,6 +263,9 @@ private fun WelcomeScreenContent() {
 ## Configuring Onboard screens
 
 Full config options: [Documentation](docs/OnboardConfigOptions.md)
+
+<details>
+    <summary>Onboard screens with only one native onboard fullscreen</summary>
 
 ### Step 1: Create Onboarding Page Configurations
 
@@ -301,10 +314,10 @@ Create an AperoOnboardUiConfig object to customize the appearance of the onboard
 the previously created **AperoOnboardPageConfig**
 objects into this configuration.
 
-| Parameter              | Description                                                                                    |
-|------------------------|------------------------------------------------------------------------------------------------|
-| **primaryColor**       | Color of the elements on onboarding screen such as indicators, next button, ads buttons        |
-| **backgroundColor**    | Background color of the onboarding screen                                                      |
+| Parameter           | Description                                                                             |
+|---------------------|-----------------------------------------------------------------------------------------|
+| **primaryColor**    | Color of the elements on onboarding screen such as indicators, next button, ads buttons |
+| **backgroundColor** | Background color of the onboarding screen                                               |
 
 ```kotlin
 val onboardConfig = AperoOnboardUiConfig(
@@ -316,7 +329,8 @@ val onboardConfig = AperoOnboardUiConfig(
 
 ## Configure Ads
 
-First Open library takes care of showing splash ads and first open ads, to do that you have to provide the ads id.
+First Open library takes care of showing splash ads and first open ads, to do that you have to
+provide the ads id.
 
 Full config options: [Documentation](docs/AdsConfigOptions.md)
 
@@ -349,6 +363,159 @@ val config = AperoFOConfig.Builder()
 // Start first open flow
 AperoSGFO.startFlow(this, config)
 ```
+
+</details>
+
+<details>
+    <summary>Onboard screens with two native onboard fullscreen</summary>
+
+### Step 1: Firebase Configuration for Onboard Screens
+
+To ensure, your application displays two native onboard fullscreen advertisements, follow these
+steps:
+
+1. <b>Open your Firebase project.</b>
+
+2. <b>Add a key named `enable_two_native_onboard_fullscreen` and set its default value to true</b>
+
+<b>Advertisement Order for Onboard Screens</b>
+
+When `enable_two_native_onboard_fullscreen` is set to `true`, the order of advertisements will be:
+
+1. Start
+2. Splash
+3. Language First Open
+4. Welcome (optional)
+5. Onboard 1
+6. <b>Native Onboard Fullscreen 1</b>
+7. Onboard 2
+8. <b>Native Onboard Fullscreen 2</b>
+9. Onboard 3
+10. Onboard 4 (optional)
+11. Finish
+
+<b>Handling Internet Issues</b>
+
+If there is an issue with the Internet, the Remote Config will set
+`enable_two_native_onboard_fullscreen` to `false` by default. In this case, only Native Onboard
+Fullscreen 1 will be shown. The order of advertisements will be:
+
+1. Start
+2. Splash
+3. Language First Open
+4. Welcome (optional)
+5. Onboard 1
+6. Onboard 2
+7. <b>Native Onboard Fullscreen 1</b>
+8. Onboard 3
+9. Onboard 4 (optional)
+10. Finish
+
+On the section [configure ad](#configure-ads), take a notice when set
+up `native_onboard_1_fullscreen` & `native_onboard_2_fullscreen`
+
+### Step 2: Create Onboarding Page Configurations
+
+Start by defining three **AperoOnboardPageConfig** objects, one for each onboarding screen. Ensure
+these configurations are created in the order you
+want them to appear: 1, 2, 3.
+
+```kotlin
+val onboard1Config = AperoOnboardPageConfig()
+val onboard2Config = AperoOnboardPageConfig()
+val onboard3Config = AperoOnboardPageConfig()
+```
+
+### Step 3: Add UI Content to Each Onboarding Page
+
+To customize the UI for each onboarding screen, you can assign a layout resource ID or a Composable
+function to the corresponding *
+*AperoOnboardPageConfig** object.
+
+### Using XML Layouts
+
+If your onboarding screens are defined using XML layouts, simply assign the layout resource ID to
+each  **AperoOnboardPageConfig** object.
+
+```kotlin
+val onboard1Config = AperoOnboardPageConfig(layoutOnboardContentId = R.layout.layout_onboard_1)
+val onboard2Config = AperoOnboardPageConfig(layoutOnboardContentId = R.layout.layout_onboard_2)
+val onboard3Config = AperoOnboardPageConfig(layoutOnboardContentId = R.layout.layout_onboard_3)
+```
+
+### Using Jetpack Compose
+
+If you prefer to define your onboarding screens with Jetpack Compose, you can pass a Composable
+function directly to each **AperoOnboardPageConfig**
+object:
+
+```kotlin
+val onboard1Config = AperoOnboardPageConfig(composableContent = { OnboardScreen1Compose() })
+val onboard2Config = AperoOnboardPageConfig(composableContent = { OnboardScreen2Compose() })
+val onboard3Config = AperoOnboardPageConfig(composableContent = { OnboardScreen3Compose() })
+```
+
+### Step 4: Configure the Onboarding UI
+
+Create an AperoOnboardUiConfig object to customize the appearance of the onboarding screens. Pass
+the previously created **AperoOnboardPageConfig**
+objects into this configuration.
+
+| Parameter           | Description                                                                             |
+|---------------------|-----------------------------------------------------------------------------------------|
+| **primaryColor**    | Color of the elements on onboarding screen such as indicators, next button, ads buttons |
+| **backgroundColor** | Background color of the onboarding screen                                               |
+
+```kotlin
+val onboardConfig = AperoOnboardUiConfig(
+    primaryColor = yourPrimaryColor,
+    backgroundColor = yourBackgroundColor,
+    pagesConfig = listOf(onboard1Config, onboard2Config, onboard3Config)
+)
+```
+
+## Configure Ads
+
+First Open library takes care of showing splash ads and first open ads, to do that you have to
+provide the ads id.
+
+Full config options: [Documentation](docs/AdsConfigOptions.md)
+
+Example:
+
+```kotlin
+// Set up ads config
+val adsConfig = AperoFOAdsConfig.Builder()
+    .setInterSplashHighId(BuildConfig.inter_splash_high)
+    .setInterSplashId(BuildConfig.inter_splash)
+    // More ads id
+    .setNativeOnboardFullscreenId(BuildConfig.native_ob_fullscr) // set up native_onboard_1_fullscreen
+    .setNativeOnboardFullscreenHighId(BuildConfig.native_ob_fullscr_high)
+    .setNativeOnboardFullscreen2Id(BuildConfig.native_ob_fullscr_2) // set up native_onboard_2_fullscreen
+    .setNativeOnboardFullscreen2HighId(BuildConfig.native_ob_fullscr_2_high)
+    .build()
+```
+
+## Start flow
+
+After configuring everything, it's time to assemble configs and start the flow
+
+```kotlin
+// Assemble configs
+val config = AperoFOConfig.Builder()
+    .setCallback(callback)
+    .setAdsConfig(adsConfig)
+    .setSplashUiConfig(splashConfig)
+    .setLanguageUiConfig(languageConfig)
+    .setWelcomeUiConfig(welcomeConfig)
+    .setOnboardUiConfig(onboardConfig)
+    .build()
+
+// Start first open flow
+AperoSGFO.startFlow(this, config)
+```
+
+</details>
 
 ## Customization
 
