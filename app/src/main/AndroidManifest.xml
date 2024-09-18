@@ -12,7 +12,7 @@
         android:theme="@style/Theme.AperoSGFirstOpen"
         tools:targetApi="31">
         <activity
-            android:name="apero.aperosg.monetizationsample.FirstOpenActivity"
+            android:name="apero.aperosg.monetizationsample.FirstOpenTwoNativeFullscreenActivity"
             android:configChanges="locale|layoutDirection|orientation|screenLayout|uiMode|touchscreen|screenSize|smallestScreenSize"
             android:exported="true">
             <intent-filter>

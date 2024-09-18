@@ -69,8 +69,14 @@ android {
             buildConfigField("String", "native_onboard_3_high", testNativeId)
             buildConfigField("String", "native_onboard_4", testNativeId)
             buildConfigField("String", "native_onboard_4_high", testNativeId)
+
             buildConfigField("String", "native_ob_fullscr", testNativeId)
+            buildConfigField("String", "native_ob_fullscr_medium", testNativeId)
             buildConfigField("String", "native_ob_fullscr_high", testNativeId)
+
+            buildConfigField("String", "native_ob_fullscr_2", testNativeId)
+            buildConfigField("String", "native_ob_fullscr_2_medium", testNativeId)
+            buildConfigField("String", "native_ob_fullscr_2_high", testNativeId)
 
             buildConfigField("Boolean", "dev", "true")
         }
@@ -108,7 +114,7 @@ android {
 }
 
 dependencies {
-    implementation("apero.aperosg.firstopen:firstopen:1.0.3")
+    implementation("apero.aperosg.firstopen:firstopen:1.0.4-alpha10")
 
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.4")
