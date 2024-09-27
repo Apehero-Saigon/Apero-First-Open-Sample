@@ -29,7 +29,7 @@ maven {
 Inside app module's build.gradle, add implementation for library:
 
 ```
-implementation("apero.aperosg.firstopen:firstopen:1.0.4-alpha10")
+implementation("apero.aperosg.firstopen:firstopen:1.0.4")
 ```
 
 # Table of Contents
