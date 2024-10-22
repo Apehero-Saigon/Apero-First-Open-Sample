@@ -41,7 +41,8 @@ android {
     productFlavors {
         val testInterId = "\"ca-app-pub-3940256099942544/1033173712\""
         val testAppOpenId = "\"ca-app-pub-3940256099942544/9257395921\""
-        val testNativeId = "\"ca-app-pub-3940256099942544/2247696110\""
+//        val testNativeId = "\"ca-app-pub-3940256099942544/2247696110\""
+        val testNativeId = "\"/21775744923/example/native\""
         val testBannerId = "\"ca-app-pub-3940256099942544/6300978111\""
         val testRewardId = "\"ca-app-pub-3940256099942544/5224354917\""
         val testRewardInterId = "\"ca-app-pub-3940256099942544/5354046379\""
@@ -114,7 +115,7 @@ android {
 }
 
 dependencies {
-    implementation("apero.aperosg.firstopen:firstopen:1.0.5-alpha05")
+    implementation("apero.aperosg.firstopen:firstopen:1.0.5-alpha07")
 
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.4")
