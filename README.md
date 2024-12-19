@@ -29,7 +29,7 @@ maven {
 Inside app module's build.gradle, add implementation for library:
 
 ```
-implementation("apero.aperosg.firstopen:firstopen:1.0.5")
+implementation("apero.aperosg.firstopen:firstopen:1.0.7-alpha03")
 ```
 
 # Table of Contents
@@ -85,6 +85,11 @@ implementation("apero.aperosg.firstopen:firstopen:1.0.5")
                     // Do something when user confirm language
                     // Such as save language to Preferences...
                 }
+   
+                 override fun onOnboardPageChanged(currentPage: Int, totalPage: Int) {
+                       // Do something when onboard page change
+                       // Such as preload ad 
+                   }    
     
                 override fun onFinished() {
                     // Go to next screen

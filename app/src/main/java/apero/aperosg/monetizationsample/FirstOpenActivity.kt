@@ -34,6 +34,10 @@ class FirstOpenActivity : AppCompatActivity() {
                 // Do something when user confirm language
             }
 
+            override fun onOnboardPageChanged(pageIndex: Int, pageSize: Int) {
+                // Do something when onboard page change
+            }
+
             override fun onFinished() {
                 // Go to next screen
                 startActivity((Intent(this@FirstOpenActivity, MainActivity::class.java)))
