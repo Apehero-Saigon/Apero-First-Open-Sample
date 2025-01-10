@@ -29,5 +29,9 @@ val onboardConfig = AperoOnboardUiConfig(
     backgroundColor = yourBackgroundColor,
     // Declared pages config, up to 4 configs for 4 pages
     pages = listOf(onboard1Config, onboard2Config, onboard3Config, onboard4Config),
+    // Style of next button in onboard pages
+    nextButtonStyle = ButtonStyle.Normal/ButtonStyle.Outline/ButtonStyle.Solid,
+    // Style of start button at the end of onboard
+    startButtonStyle = ButtonStyle.Normal/ButtonStyle.Outline/ButtonStyle.Solid,
 )
 ```

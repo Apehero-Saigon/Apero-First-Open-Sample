@@ -115,7 +115,7 @@ android {
 }
 
 dependencies {
-    implementation("apero.aperosg.firstopen:firstopen:1.0.7-alpha03")
+    implementation("apero.aperosg.firstopen:firstopen:1.0.7-alpha05")
 
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.4")

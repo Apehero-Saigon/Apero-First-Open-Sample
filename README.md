@@ -29,7 +29,7 @@ maven {
 Inside app module's build.gradle, add implementation for library:
 
 ```
-implementation("apero.aperosg.firstopen:firstopen:1.0.7-alpha03")
+implementation("apero.aperosg.firstopen:firstopen:1.0.7-alpha05")
 ```
 
 # Table of Contents
@@ -192,6 +192,7 @@ val languageConfig = AperoLanguageUiConfig.Builder()
         )
     )
     //.setPrimaryColor(Color.BLUE) // Set Primary color of the screen
+    //.setNextButtonStyle(ButtonStyle.Solid) // Set next button style
     .build()
 ```
 
@@ -466,10 +467,12 @@ Create an AperoOnboardUiConfig object to customize the appearance of the onboard
 the previously created **AperoOnboardPageConfig**
 objects into this configuration.
 
-| Parameter           | Description                                                                             |
-|---------------------|-----------------------------------------------------------------------------------------|
-| **primaryColor**    | Color of the elements on onboarding screen such as indicators, next button, ads buttons |
-| **backgroundColor** | Background color of the onboarding screen                                               |
+| Parameter            | Description                                                                             |
+|----------------------|-----------------------------------------------------------------------------------------|
+| **primaryColor**     | Color of the elements on onboarding screen such as indicators, next button, ads buttons |
+| **backgroundColor**  | Background color of the onboarding screen                                               |
+| **nextButtonStyle**  | Style of next button, either Normal, Solid or Outline                                   |
+| **startButtonStyle** | Style of start button, either Normal, Solid or Outline                                  |
 
 ```kotlin
 val onboardConfig = AperoOnboardUiConfig(
