@@ -222,18 +222,12 @@ call ``AperoFO.setLanguage(languageCode)`` if you change language.
 
 If you don't want to use default layout for language xml below:
 <p align="center">
-<img src="./photo/photo_01.png" />
-</p>
-<p align="center">
-        <img src="./photo/photo_02.png" />
+<img src="./photo/photo_1.png" height="400" />
 </p>
 
 And you want to use your customized language element xml like this
 <p align="center">
-    <img src="./photo/photo_03.png" />
-</p>
-<p align="center">
-    <img src="./photo/photo_04.png" />
+    <img src="./photo/photo_2.png"  height="400" />
 </p>
 
 To implement a custom layout for the language element in the Language First Open screen, follow

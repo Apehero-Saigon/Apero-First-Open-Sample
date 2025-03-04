@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AperoSG First Open</string>
+    <string name="app_name">Astronext First Open</string>
     <string name="facebook_app_id">facebook_app_id</string>
     <string name="facebook_client_token">facebook_client_token</string>
     <string name="welcome_title">Welcome to Apero First Open library</string>
