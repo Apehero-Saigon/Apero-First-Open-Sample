@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "apero.aperosg.monetizationsample"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "apero.aperosg.monetizationsample"
@@ -115,7 +115,7 @@ android {
 }
 
 dependencies {
-    implementation("apero.aperosg.firstopen:firstopen:1.0.7-alpha05")
+    implementation("apero.aperosg.firstopen:firstopen:1.0.7-test01")
 
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.4")

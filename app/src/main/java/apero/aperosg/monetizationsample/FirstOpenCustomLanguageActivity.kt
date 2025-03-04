@@ -3,7 +3,7 @@ package apero.aperosg.monetizationsample
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
+import androidx.compose.ui.graphics.Color
 import apero.aperosg.firstopen.app.AperoFO
 import apero.aperosg.firstopen.app.AperoFOAdsConfig
 import apero.aperosg.firstopen.app.AperoFOCallback
@@ -12,12 +12,10 @@ import apero.aperosg.firstopen.app.AperoLanguageUiConfig
 import apero.aperosg.firstopen.app.AperoOnboardPageConfig
 import apero.aperosg.firstopen.app.AperoOnboardUiConfig
 import apero.aperosg.firstopen.app.AperoSplashUiConfig
+import apero.aperosg.firstopen.app.ButtonStyle
 import apero.aperosg.firstopen.model.Language
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
-class FirstOpenActivity : AppCompatActivity() {
-
+class FirstOpenCustomLanguageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -40,7 +38,12 @@ class FirstOpenActivity : AppCompatActivity() {
 
             override fun onFinished() {
                 // Go to next screen
-                startActivity((Intent(this@FirstOpenActivity, MainActivity::class.java)))
+                startActivity(
+                    (Intent(
+                        this@FirstOpenCustomLanguageActivity,
+                        MainActivity::class.java
+                    ))
+                )
                 finish()
             }
         }
@@ -94,24 +97,47 @@ class FirstOpenActivity : AppCompatActivity() {
                     Language.Portuguese,
                 )
             )
+            .setNextButtonStyle(ButtonStyle.Solid)
+            .setPrimaryColor(0xFF6F55CC) // set primary for button next
+            .setTitleColor(0xFFFFFFFF.toInt()) // set title for "Select language"
+            .setCustomImageBackground(R.drawable.img_language_background) // set custom image background
+            .setCustomLanguageLayoutId(R.layout.layout_language_element) // set language layout
+            .setCustomChosenLanguageLayoutId(R.layout.layout_language_element_chosen) // set language layout when user select language
             .build()
 
         // Set up Onboard screens config
         // Config for onboard screen 1
-        val onboard1Config = AperoOnboardPageConfig(layoutOnboardContentId = R.layout.layout_onboard_1)
+        val onboard1Config =
+            AperoOnboardPageConfig(layoutOnboardContentId = R.layout.layout_onboard_1_test)
         // Config for onboard screen 2
-        val onboard2Config = AperoOnboardPageConfig(layoutOnboardContentId = R.layout.layout_onboard_2)
+        val onboard2Config =
+            AperoOnboardPageConfig(layoutOnboardContentId = R.layout.layout_onboard_2)
         // Config for onboard screen 3
-        val onboard3Config = AperoOnboardPageConfig(layoutOnboardContentId = R.layout.layout_onboard_3)
+        val onboard3Config =
+            AperoOnboardPageConfig(layoutOnboardContentId = R.layout.layout_onboard_3)
         // Config for onboard screen 4
-        val onboard4Config = AperoOnboardPageConfig(layoutOnboardContentId = R.layout.layout_onboard_4)
+        val onboard4Config =
+            AperoOnboardPageConfig(layoutOnboardContentId = R.layout.layout_onboard_4)
         // Combine config for onboard screens
-        val onboardConfig = AperoOnboardUiConfig(pages = listOf(onboard1Config, onboard2Config, onboard3Config, onboard4Config))
+        val onboardConfig = AperoOnboardUiConfig(
+            startButtonStyle = ButtonStyle.Outline,
+            pages = listOf(onboard1Config, onboard2Config, onboard3Config, onboard4Config),
+            nextButtonStyle = ButtonStyle.Normal,
+            backgroundGradient = listOf(
+                // at lease 2 colours. Otherwise, throw exceptions
+                0xFF0F0F27,
+                0xFF0F0F26,
+                0xFF0F1129,
+                0xFF1A244B,
+            ),
+            primaryColor = 0xFF27B8CD
+        )
 
         // Assemble configs
         val config = AperoFOConfig.Builder()
             .setCallback(callback)
             .setAdsConfig(adsConfig)
+
             .setSplashUiConfig(splashConfig)
             .setLanguageUiConfig(languageConfig)
             .setOnboardUiConfig(onboardConfig)
