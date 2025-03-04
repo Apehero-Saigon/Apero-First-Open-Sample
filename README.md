@@ -34,16 +34,16 @@ implementation("apero.aperosg.firstopen:firstopen:1.0.7-alpha05")
 
 # Table of Contents
 
-1. [Structure](#structure)
-2. [Configure Splash screen](#configure-splash-screen)
-3. [Configure Language FO screen](#configure-language-screen)
-4. [Configure Welcome screen (Optional)](#configure-welcome-screen-optional)
-5. [Configure Onboard screens](#configuring-onboard-screens)
+1. [Structure](#1-structure)
+2. [Configure Splash screen](#2-configure-splash-screen)
+3. [Configure Language First Open screen](#3-configure-language-first-open-screen)
+4. [Configure Welcome screen (Optional)](#4-configure-welcome-screen-optional)
+5. [Configure Onboard screens](#5-configure-onboard-screens)
 6. [Configure Ads](#configure-ads)
 7. [Start flow](#start-flow)
 8. [Customization](#customization)
 
-## Structure
+# [**1. Structure**](#1-structure)
 
 1. Create a FirstOpenActivity and make it launcher activity in Manifest
    ```xml
@@ -143,7 +143,7 @@ implementation("apero.aperosg.firstopen:firstopen:1.0.7-alpha05")
     }
     ```
 
-## Configure Splash screen
+# [**2. Configure Splash screen**](#2-configure-splash-screen)
 
 Full config options: [Documentation](docs/SplashConfigOptions.md)
 
@@ -163,6 +163,8 @@ own layout
   .build()
    ```
 
+-
+
 ## Additional initialization in Splash (Optional if you have other initializations)
 
 If you have any other initializations that needs to be done in Splash screen such as remote configs,
@@ -175,7 +177,7 @@ follow these instructions:
 Sample
 file: [Source file](app/src/main/java/apero/aperosg/monetizationsample/FirstOpenWithSplashInitializationActivity.kt)
 
-## Configure Language screen
+# [**3. Configure Language First Open screen**](#3-configure-language-first-open-screen)
 
 This step setups languages in Language screen, you provides list of languages to show in Language FO
 screen.
@@ -216,7 +218,110 @@ startActivity(Intent(context, LanguageSettingsActivity::class.java))
 You can also use your custom **Language Settings** screen but
 call ``AperoFO.setLanguage(languageCode)`` if you change language.
 
-## Configure Welcome screen (Optional)
+### Customize Language Selector with XML
+
+If you don't want to use default layout for language xml below:
+<p align="center">
+<img src="./photo/photo_01.png" />
+</p>
+<p align="center">
+        <img src="./photo/photo_02.png" />
+</p>
+
+And you want to use your customized language element xml like this
+<p align="center">
+    <img src="./photo/photo_03.png" />
+</p>
+<p align="center">
+    <img src="./photo/photo_04.png" />
+</p>
+
+To implement a custom layout for the language element in the Language First Open screen, follow
+these steps:
+
+1. **Create Your Custom Layout**: First, design your custom layout XML file for the language
+   element. For instance, create two files named `layout_language_element.xml` &
+   `layout_language_element_chosen.xml` under `res/layout` directory. Their content will look like
+   the following code snippet:
+
+   ```xml
+   <!-- res/layout/custom_language_item.xml -->
+    <?xml version="1.0" encoding="utf-8"?>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent" android:layout_height="wrap_content"
+        android:orientation="horizontal" android:background="@color/blue_500" android:padding="16dp">
+    
+        <!--tag languageFlag is required in your customized layout-->
+        <ImageView android:tag="languageFlag" android:layout_width="40dp" android:layout_height="24dp"
+            android:layout_marginEnd="8dp" android:contentDescription="Flag"
+            android:src="@drawable/app_icon" />
+    
+        <!--tag languageName is required in your customized layout-->
+        <TextView android:tag="languageName" android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:text="Phong-Kaster" android:textSize="16sp"
+            android:textColor="@android:color/black" />
+    </LinearLayout>
+   ```
+
+Note: Ensure that you use the exact [***android:tag=languageFlag***](#) & [
+***android:tag=languageName***](#) in the custom layout to enable correct property mapping by the
+library.
+
+2. **Set the Custom Layout in the Configuration**: Configure the `AperoLanguageUiConfig` to use your
+   custom layout by specifying the layout resource ID.
+
+   ```kotlin
+   val languageConfig = AperoLanguageUiConfig.Builder()
+       .setLanguages(
+           listOf(
+               Language.English,
+               Language.German,
+               // Add additional languages as needed
+           )
+       )
+       // set text color for "Select language"
+        .setTitleColor(0xFFFFFF00.toInt()) 
+   
+       // set custom image background instead of default background color
+        .setCustomImageBackground(R.drawable.img_language_background)
+   
+       // set custom language layout with layout_language_element.xml 
+       .setCustomLanguageLayoutId(R.layout.layout_language_element)
+   
+       // set custom language layout when user select language layout_language_element_chosen.xml
+       .setCustomChosenLanguageLayoutId(R.layout.layout_language_element_chosen) 
+       .build()
+   ```
+
+
+| Function                            | Description                                                                                            |
+|-------------------------------------|--------------------------------------------------------------------------------------------------------|
+| setLanguages                        | Sets the list of languages to be displayed in the Language First Open screen.                          |
+| setPrimaryColor                     | Sets the primary color of the elements on the Language First Open screen.                              |
+| setNextButtonStyle                  | Sets the style for the next button, such as solid, outline, or normal.                                 |
+| setTitleColor                       | Sets the text color for the "Select language" title.                                                   |
+| setCustomImageBackground            | Sets a custom drawable resource as the background image for the language selection screen.             |
+| setCustomLanguageLayoutId           | Sets a custom layout resource ID for language elements in the Language First Open screen.             |
+| setCustomChosenLanguageLayoutId     | Sets a custom layout resource ID for the selected language element in the Language First Open screen.  |
+
+
+3. **Configure the First Open Flow**: Ensure your configuration is correctly set up within your
+   `FirstOpenActivity`.
+
+   ```kotlin
+   private fun setupFirstOpenFlow() {
+       val config = AperoFOConfig.Builder()
+           .setLanguageUiConfig(languageConfig)
+           .build()
+
+       AperoFO.startFlow(this, config)
+   }
+   ```
+
+By following these steps, you can implement a custom layout for the language element in the Language
+First Open screen, giving you greater control over the visual appearance and functionality.
+
+# [**4. Configure Welcome screen (Optional)**](#4-configure-welcome-screen-optional)
 
 This step setups Welcome screen (screen between Language FO and Onboard).
 
@@ -266,7 +371,7 @@ private fun WelcomeScreenContent() {
 }
 ```
 
-## Configuring Onboard screens
+# [**5. Configure Onboard screens**](#5-configure-onboard-screens)
 
 Full config options: [Documentation](docs/OnboardConfigOptions.md)
 
@@ -333,7 +438,7 @@ val onboardConfig = AperoOnboardUiConfig(
 )
 ```
 
-## Configure Ads
+### Configure Ads
 
 First Open library takes care of showing splash ads and first open ads, to do that you have to
 provide the ads id.
@@ -351,7 +456,7 @@ val adsConfig = AperoFOAdsConfig.Builder()
     .build()
 ```
 
-## Start flow
+### Start flow
 
 After configuring everything, it's time to assemble configs and start the flow
 
@@ -504,7 +609,7 @@ val adsConfig = AperoFOAdsConfig.Builder()
     .build()
 ```
 
-## Start flow
+### Start flow
 
 After configuring everything, it's time to assemble configs and start the flow
 
@@ -525,7 +630,29 @@ AperoSGFO.startFlow(this, config)
 
 </details>
 
-## Customization
+To use linear gradient in Onboard serial screens, we provide background gradient property. Remember,
+background gradient requires at least two colours to work properly.
+
+   ```kotlin
+   val onboardConfig = AperoOnboardUiConfig(
+    startButtonStyle = ButtonStyle.Outline,
+    pages = listOf(onboard1Config, onboard2Config, onboard3Config, onboard4Config),
+    nextButtonStyle = ButtonStyle.Normal,
+    backgroundColor = 0xFF0F0F27,
+    backgroundGradient = listOf(
+        // at lease 2 colours. Otherwise, throw exceptions
+        0xFF0F0F27,
+        0xFF0F0F26,
+        0xFF0F1129,
+        0xFF1A244B,
+    ),
+    primaryColor = 0xFF27B8CD,
+)
+   ```
+
+`Note: If both backgroundColor & backgroundGradient are filled with colours. Background gradient will be used instead of background color`
+
+# [**6. Customization**](#6-customization)
 
 ### Ads layout customization
 
