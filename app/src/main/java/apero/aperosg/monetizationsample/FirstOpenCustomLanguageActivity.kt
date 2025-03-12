@@ -1,7 +1,12 @@
 package apero.aperosg.monetizationsample
 
+import android.content.ContextWrapper
 import android.content.Intent
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.CheckBox
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.ui.graphics.Color
 import apero.aperosg.firstopen.app.AperoFO
@@ -12,8 +17,10 @@ import apero.aperosg.firstopen.app.AperoLanguageUiConfig
 import apero.aperosg.firstopen.app.AperoOnboardPageConfig
 import apero.aperosg.firstopen.app.AperoOnboardUiConfig
 import apero.aperosg.firstopen.app.AperoSplashUiConfig
+import apero.aperosg.firstopen.app.AperoWelcomeUiConfig
 import apero.aperosg.firstopen.app.ButtonStyle
 import apero.aperosg.firstopen.model.Language
+import java.util.Locale
 
 class FirstOpenCustomLanguageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -105,6 +112,12 @@ class FirstOpenCustomLanguageActivity : AppCompatActivity() {
             .setCustomChosenLanguageLayoutId(R.layout.layout_language_element_chosen) // set language layout when user select language
             .build()
 
+        // Set up welcome screen (if exist)
+        val welcomeConfig = AperoWelcomeUiConfig.Builder()
+            .setCustomImageBackground(R.drawable.img_language_background)
+            .setViewContentProvider { setUpWelcomeScreen() }
+            .build()
+
         // Set up Onboard screens config
         // Config for onboard screen 1
         val onboard1Config =
@@ -137,7 +150,7 @@ class FirstOpenCustomLanguageActivity : AppCompatActivity() {
         val config = AperoFOConfig.Builder()
             .setCallback(callback)
             .setAdsConfig(adsConfig)
-
+            .setWelcomeUiConfig(welcomeConfig)
             .setSplashUiConfig(splashConfig)
             .setLanguageUiConfig(languageConfig)
             .setOnboardUiConfig(onboardConfig)
@@ -145,5 +158,32 @@ class FirstOpenCustomLanguageActivity : AppCompatActivity() {
 
         // Start first open flow
         AperoFO.startFlow(this, config)
+    }
+
+    /** Set up custom welcome screen content
+     * Provide your own logic here, this is a sample code */
+    private fun setUpWelcomeScreen(): View {
+        // Set up localized context for welcome screen to enable translation
+        val localizedConfig = resources.configuration.apply { setLocale(Locale.getDefault()) }
+        val localizedContext = ContextWrapper(this).createConfigurationContext(localizedConfig)
+
+        val welcomeScreenView = LayoutInflater.from(localizedContext).inflate(R.layout.layout_welcome_scr, null, false)
+        val checkbox = welcomeScreenView.findViewById<CheckBox>(R.id.checkbox)
+        val nextButton = welcomeScreenView.findViewById<View>(R.id.button)
+        checkbox.setOnClickListener {
+            //------- Important ----------
+            // Show welcome dup screen when user click checkbox
+            AperoFO.showWelcomeDupScreen()
+            //----------------------------
+        }
+        nextButton.setOnClickListener {
+            if (checkbox.isChecked) {
+                // Finish welcome screen and move to next screen
+                AperoFO.completeWelcomeScreen()
+            } else {
+                Toast.makeText(this, R.string.please_check_the_checkbox, Toast.LENGTH_SHORT).show()
+            }
+        }
+        return welcomeScreenView
     }
 }

@@ -29,7 +29,7 @@ maven {
 Inside app module's build.gradle, add implementation for library:
 
 ```
-implementation("apero.aperosg.firstopen:firstopen:1.0.7-alpha05")
+implementation("apero.aperosg.firstopen:firstopen:1.0.7-alpha06")
 ```
 
 # Table of Contents
@@ -239,7 +239,7 @@ these steps:
    the following code snippet:
 
    ```xml
-   <!-- res/layout/custom_language_item.xml -->
+      <!-- res/layout/custom_language_item.xml -->
     <?xml version="1.0" encoding="utf-8"?>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent" android:layout_height="wrap_content"
