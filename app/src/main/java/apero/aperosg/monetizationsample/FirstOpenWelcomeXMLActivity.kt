@@ -98,8 +98,10 @@ class FirstOpenWelcomeXMLActivity: AppCompatActivity() {
 
         // Set up welcome screen (if exist)
         val welcomeConfig = AperoWelcomeUiConfig.Builder()
+            .setCustomImageBackground(R.drawable.img_language_background) // for using a image as background. Now, xml layout no longer include "android:background="@drawable/img_custom_language_background"
             .setViewContentProvider { setUpWelcomeScreen() }
             .build()
+
 
         // Set up Onboard screens config
         val onboard1Config = AperoOnboardPageConfig(layoutOnboardContentId = R.layout.layout_onboard_1)

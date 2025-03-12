@@ -16,11 +16,11 @@ block.
 
 ```kotlin
 maven {
-    url = uri("https://artifactory.apero.vn/artifactory/gradle-release/")
-    credentials {
-        username = "" // Username here
-        password = "" // Password here
-    }
+   url = uri("https://artifactory.apero.vn/artifactory/gradle-release/")
+   credentials {
+      username = "" // Username here
+      password = "" // Password here
+   }
 }
 ```
 
@@ -29,7 +29,7 @@ maven {
 Inside app module's build.gradle, add implementation for library:
 
 ```
-implementation("apero.aperosg.firstopen:firstopen:1.0.7-alpha06")
+implementation("apero.aperosg.firstopen:firstopen:1.0.8")
 ```
 
 # Table of Contents
@@ -229,7 +229,6 @@ And you want to use your customized language element xml like this
 <p align="center">
     <img src="./photo/photo_2.png"  height="400" />
 </p>
-
 To implement a custom layout for the language element in the Language First Open screen, follow
 these steps:
 
@@ -239,7 +238,7 @@ these steps:
    the following code snippet:
 
    ```xml
-      <!-- res/layout/custom_language_item.xml -->
+   <!-- res/layout/custom_language_item.xml -->
     <?xml version="1.0" encoding="utf-8"?>
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent" android:layout_height="wrap_content"
@@ -329,19 +328,34 @@ Full config options: [Documentation](docs/WelcomeConfigOptions.md)
 Refer to
 file [Source file](app/src/main/java/apero/aperosg/monetizationsample/FirstOpenWelcomeXMLActivity.kt)
 
+To use an image as background like the following photo:
+
+<p align="center">
+<img src="./photo/photo_3.png" height="400" />
+</p>
+
+Use `setCustomImageBackground(R.drawable.your_background)` in the welcomeConfig setup. Ensure the Welcome XML does not include android:background="@drawable/your_background.
+Otherwise, welcome screen has its content as the following layout below:
+
+<p align="center">
+<img src="./photo/photo_4.png" height="400" />
+</p>
+
 ```kotlin
 private fun setupFirstOpenFlow() {
-    //...
-    val welcomeConfig = AperoWelcomeUiConfig.Builder()
-        .setViewContentProvider { setUpWelcomeScreen() }
-        .build()
-    //...
+   //...
+   val welcomeConfig = AperoWelcomeUiConfig.Builder()
+      .setCustomImageBackground(R.drawable.img_language_background) // for using a image as background. Now, xml layout no longer include "android:background="@drawable/img_custom_language_background"
+      .setViewContentProvider { setUpWelcomeScreen() }
+      .build()
+
+   //...
 }
 
 private fun setUpWelcomeScreen(): View {
-    val welcomeScreenView = layoutInflater.inflate(R.layout.layout_welcome_scr, null, false)
-    // Setup your welcome screen layout here
-    return welcomeScreenView
+   val welcomeScreenView = layoutInflater.inflate(R.layout.layout_welcome_scr, null, false)
+   // Setup your welcome screen layout here
+   return welcomeScreenView
 }
 ```
 
@@ -352,16 +366,16 @@ file [Source file](app/src/main/java/apero/aperosg/monetizationsample/FirstOpenW
 
 ```kotlin
 private fun setupFirstOpenFlow() {
-    //...
-    val welcomeConfig = AperoWelcomeUiConfig.Builder()
-        .setComposableContent { WelcomeScreenContent() }
-        .build()
-    //...
+   //...
+   val welcomeConfig = AperoWelcomeUiConfig.Builder()
+      .setComposableContent { WelcomeScreenContent() }
+      .build()
+   //...
 }
 
 @Composable
 private fun WelcomeScreenContent() {
-    // Set up your welcome screen layout here
+   // Set up your welcome screen layout here
 }
 ```
 
@@ -426,9 +440,9 @@ objects into this configuration.
 
 ```kotlin
 val onboardConfig = AperoOnboardUiConfig(
-    primaryColor = yourPrimaryColor,
-    backgroundColor = yourBackgroundColor,
-    pagesConfig = listOf(onboard1Config, onboard2Config, onboard3Config)
+   primaryColor = yourPrimaryColor,
+   backgroundColor = yourBackgroundColor,
+   pagesConfig = listOf(onboard1Config, onboard2Config, onboard3Config)
 )
 ```
 
@@ -444,10 +458,10 @@ Example:
 ```kotlin
 // Set up ads config
 val adsConfig = AperoFOAdsConfig.Builder()
-    .setInterSplashHighId(BuildConfig.inter_splash_high)
-    .setInterSplashId(BuildConfig.inter_splash)
-    // More ads id
-    .build()
+   .setInterSplashHighId(BuildConfig.inter_splash_high)
+   .setInterSplashId(BuildConfig.inter_splash)
+   // More ads id
+   .build()
 ```
 
 ### Start flow
@@ -457,13 +471,13 @@ After configuring everything, it's time to assemble configs and start the flow
 ```kotlin
 // Assemble configs
 val config = AperoFOConfig.Builder()
-    .setCallback(callback)
-    .setAdsConfig(adsConfig)
-    .setSplashUiConfig(splashConfig)
-    .setLanguageUiConfig(languageConfig)
-    .setWelcomeUiConfig(welcomeConfig)
-    .setOnboardUiConfig(onboardConfig)
-    .build()
+   .setCallback(callback)
+   .setAdsConfig(adsConfig)
+   .setSplashUiConfig(splashConfig)
+   .setLanguageUiConfig(languageConfig)
+   .setWelcomeUiConfig(welcomeConfig)
+   .setOnboardUiConfig(onboardConfig)
+   .build()
 
 // Start first open flow
 AperoSGFO.startFlow(this, config)
@@ -575,9 +589,9 @@ objects into this configuration.
 
 ```kotlin
 val onboardConfig = AperoOnboardUiConfig(
-    primaryColor = yourPrimaryColor,
-    backgroundColor = yourBackgroundColor,
-    pagesConfig = listOf(onboard1Config, onboard2Config, onboard3Config)
+   primaryColor = yourPrimaryColor,
+   backgroundColor = yourBackgroundColor,
+   pagesConfig = listOf(onboard1Config, onboard2Config, onboard3Config)
 )
 ```
 
@@ -593,14 +607,14 @@ Example:
 ```kotlin
 // Set up ads config
 val adsConfig = AperoFOAdsConfig.Builder()
-    .setInterSplashHighId(BuildConfig.inter_splash_high)
-    .setInterSplashId(BuildConfig.inter_splash)
-    // More ads id
-    .setNativeOnboardFullscreenId(BuildConfig.native_ob_fullscr) // set up native_onboard_1_fullscreen
-    .setNativeOnboardFullscreenHighId(BuildConfig.native_ob_fullscr_high)
-    .setNativeOnboardFullscreen2Id(BuildConfig.native_ob_fullscr_2) // set up native_onboard_2_fullscreen
-    .setNativeOnboardFullscreen2HighId(BuildConfig.native_ob_fullscr_2_high)
-    .build()
+   .setInterSplashHighId(BuildConfig.inter_splash_high)
+   .setInterSplashId(BuildConfig.inter_splash)
+   // More ads id
+   .setNativeOnboardFullscreenId(BuildConfig.native_ob_fullscr) // set up native_onboard_1_fullscreen
+   .setNativeOnboardFullscreenHighId(BuildConfig.native_ob_fullscr_high)
+   .setNativeOnboardFullscreen2Id(BuildConfig.native_ob_fullscr_2) // set up native_onboard_2_fullscreen
+   .setNativeOnboardFullscreen2HighId(BuildConfig.native_ob_fullscr_2_high)
+   .build()
 ```
 
 ### Start flow
@@ -610,13 +624,13 @@ After configuring everything, it's time to assemble configs and start the flow
 ```kotlin
 // Assemble configs
 val config = AperoFOConfig.Builder()
-    .setCallback(callback)
-    .setAdsConfig(adsConfig)
-    .setSplashUiConfig(splashConfig)
-    .setLanguageUiConfig(languageConfig)
-    .setWelcomeUiConfig(welcomeConfig)
-    .setOnboardUiConfig(onboardConfig)
-    .build()
+   .setCallback(callback)
+   .setAdsConfig(adsConfig)
+   .setSplashUiConfig(splashConfig)
+   .setLanguageUiConfig(languageConfig)
+   .setWelcomeUiConfig(welcomeConfig)
+   .setOnboardUiConfig(onboardConfig)
+   .build()
 
 // Start first open flow
 AperoSGFO.startFlow(this, config)
@@ -629,18 +643,18 @@ background gradient requires at least two colours to work properly.
 
    ```kotlin
    val onboardConfig = AperoOnboardUiConfig(
-    startButtonStyle = ButtonStyle.Outline,
-    pages = listOf(onboard1Config, onboard2Config, onboard3Config, onboard4Config),
-    nextButtonStyle = ButtonStyle.Normal,
-    backgroundColor = 0xFF0F0F27,
-    backgroundGradient = listOf(
-        // at lease 2 colours. Otherwise, throw exceptions
-        0xFF0F0F27,
-        0xFF0F0F26,
-        0xFF0F1129,
-        0xFF1A244B,
-    ),
-    primaryColor = 0xFF27B8CD,
+   startButtonStyle = ButtonStyle.Outline,
+   pages = listOf(onboard1Config, onboard2Config, onboard3Config, onboard4Config),
+   nextButtonStyle = ButtonStyle.Normal,
+   backgroundColor = 0xFF0F0F27,
+   backgroundGradient = listOf(
+      // at lease 2 colours. Otherwise, throw exceptions
+      0xFF0F0F27,
+      0xFF0F0F26,
+      0xFF0F1129,
+      0xFF1A244B,
+   ),
+   primaryColor = 0xFF27B8CD,
 )
    ```
 
@@ -668,12 +682,12 @@ For example:
 
 ```kotlin
 val config = AperoSGFOConfig.Builder()
-    // Other configs
+   // Other configs
 
-    .setCustomNativeOnboardLayoutId(R.layout.ad_native_onboard_custom)
-    .setCustomNativeOnboardMetaLayoutId(R.layout.ad_native_onboard_meta_custom)
-    .setCustomNativeOnboardFullscreenLayoutId(R.layout.ad_native_onboard_fullscreen_custom)
-    .setCustomNativeOnboardFullscreenMetaLayoutId(R.layout.ad_native_onboard_fullscreen_custom)
+   .setCustomNativeOnboardLayoutId(R.layout.ad_native_onboard_custom)
+   .setCustomNativeOnboardMetaLayoutId(R.layout.ad_native_onboard_meta_custom)
+   .setCustomNativeOnboardFullscreenLayoutId(R.layout.ad_native_onboard_fullscreen_custom)
+   .setCustomNativeOnboardFullscreenMetaLayoutId(R.layout.ad_native_onboard_fullscreen_custom)
 
-    .build()
+   .build()
 ```
