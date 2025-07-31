@@ -1,6 +1,7 @@
 Onboard config full options
 ==================
 
+Using XML
 ```kotlin
 // Config each page of the onboard screen, maximum 4 pages
 val onboard1Config = AperoOnboardPageConfig(
@@ -34,4 +35,23 @@ val onboardConfig = AperoOnboardUiConfig(
     // Style of start button at the end of onboard
     startButtonStyle = ButtonStyle.Normal/ButtonStyle.Outline/ButtonStyle.Solid,
 )
+```
+
+Using Jetpack Compose
+```kotlin
+    // Config for onboard screen 1 
+    val onboard1Config = AperoOnboardPageConfig(composableContent = { OnboardContentPage1() })
+    // Config for onboard screen 2
+    val onboard2Config = AperoOnboardPageConfig(composableContent = { OnboardContentPage2() })
+    // Config for onboard screen 3
+    val onboard3Config = AperoOnboardPageConfig(composableContent = { OnboardContentPage3() })
+    // Combine config for onboard screens
+    val onboardConfig = AperoOnboardUiConfig(
+        pages = listOf(
+            onboard1Config,
+            onboard2Config,
+            onboard3Config
+        ),
+        primaryColor = PrimaryColor.toArgb().toLong(),
+    )
 ```

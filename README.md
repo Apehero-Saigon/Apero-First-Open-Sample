@@ -3,8 +3,8 @@ Apero First Open Library Sample
 
 This is a repository for demonstrating how to use Apero First Open Library.
 
-Apero First Open Library takes care of showing Splash Ads and first open flow (Language FO,
-Onboard...)
+Apero First Open Library takes care of showing Splash Ads and first open flow 
+(Splash -> Language -> Language dup -> Onboarding -> Welcome -> Welcome dup -> Finish)
 
 ## Requirements (Skip this if already done)
 
@@ -16,11 +16,11 @@ block.
 
 ```kotlin
 maven {
-   url = uri("https://artifactory.apero.vn/artifactory/gradle-release/")
-   credentials {
-      username = "" // Username here
-      password = "" // Password here
-   }
+    url = uri("https://artifactory.apero.vn/artifactory/gradle-release/")
+    credentials {
+        username = "" // Username here
+        password = "" // Password here
+    }
 }
 ```
 
@@ -39,9 +39,8 @@ implementation("apero.aperosg.firstopen:firstopen:1.0.8")
 3. [Configure Language First Open screen](#3-configure-language-first-open-screen)
 4. [Configure Welcome screen (Optional)](#4-configure-welcome-screen-optional)
 5. [Configure Onboard screens](#5-configure-onboard-screens)
-6. [Configure Ads](#configure-ads)
-7. [Start flow](#start-flow)
-8. [Customization](#customization)
+6. [Customize Ads](#6-customize-ads)
+7. [Configure Ads](#7-configure-ads)
 
 # [**1. Structure**](#1-structure)
 
@@ -162,8 +161,15 @@ own layout
   .setCustomSplashLayoutId(R.layout.layout_splash) // Provide custom layout
   .build()
    ```
-
--
+- Use Jetpack Compose:
+   ```kotlin
+  val splashConfig = AperoSplashUiConfig.Builder()
+  .setComposableContent {
+      SplashScreen() // Composable function
+  }
+  .build()
+   ```
+ 
 
 ## Additional initialization in Splash (Optional if you have other initializations)
 
@@ -181,6 +187,24 @@ file: [Source file](app/src/main/java/apero/aperosg/monetizationsample/FirstOpen
 
 This step setups languages in Language screen, you provides list of languages to show in Language FO
 screen.
+
+Configure the `AperoLanguageUiConfig` to use your custom your UI.
+
+| Parameter                    | Description                                                                   |
+|------------------------------|-------------------------------------------------------------------------------|
+| languages                    | Sets the list of languages to be displayed in the Language First Open screen. |
+| titleColor                   | Sets the text color for the "Select language" title.                          |
+| primaryColor                 | Sets the primary color of the elements on screen.                             |
+| nextButtonStyle              | Sets the style for the next button, such as solid, outline, tick or normal.   |
+| customLanguageLayoutId       | Sets a custom layout resource ID for language elements in normal status.      |
+| customLanguageChosenLayoutId | Sets a custom layout resource ID for language elements when item is selected. |
+| backgroundColor              | Sets the screen background using a color.                                     |
+| backgroundBrush              | Sets the screen background using a brush.                                     |
+| backgroundImage              | Sets the screen background using a drawable resource.                         |
+| itemPaddingDp                | Sets a padding between items if using jetpack compose                         |
+| customLanguageItemCompose    | Sets a custom language selector with jetpack compose                          |
+
+`Note: If you use all: backgroundImage, backgroundBrush, backgroundColor. Thay will be applied in the following order: backgroundImage > backgroundBrush > backgroundColor`
 
 Full config options: [Documentation](docs/LanguageConfigOptions.md)
 
@@ -272,8 +296,6 @@ library.
                // Add additional languages as needed
            )
        )
-       // set text color for "Select language"
-        .setTitleColor(0xFFFFFF00.toInt()) 
    
        // set custom image background instead of default background color
         .setCustomImageBackground(R.drawable.img_language_background)
@@ -286,33 +308,54 @@ library.
        .build()
    ```
 
+By following these steps, you can implement a custom layout for the language element in the Language
+First Open screen, giving you greater control over the visual appearance and functionality.
 
-| Function                            | Description                                                                                            |
-|-------------------------------------|--------------------------------------------------------------------------------------------------------|
-| setLanguages                        | Sets the list of languages to be displayed in the Language First Open screen.                          |
-| setPrimaryColor                     | Sets the primary color of the elements on the Language First Open screen.                              |
-| setNextButtonStyle                  | Sets the style for the next button, such as solid, outline, or normal.                                 |
-| setTitleColor                       | Sets the text color for the "Select language" title.                                                   |
-| setCustomImageBackground            | Sets a custom drawable resource as the background image for the language selection screen.             |
-| setCustomLanguageLayoutId           | Sets a custom layout resource ID for language elements in the Language First Open screen.             |
-| setCustomChosenLanguageLayoutId     | Sets a custom layout resource ID for the selected language element in the Language First Open screen.  |
+### Customize Language Selector with Jetpack Compose
 
+1. **Create Language Item with Jetpack Compose**: Create a Jetpack Compose composable function with
+   3
+   params:
 
-3. **Configure the First Open Flow**: Ensure your configuration is correctly set up within your
-   `FirstOpenActivity`.
+| Parameter            | Description                                 |
+|----------------------|---------------------------------------------|
+| **Language**         | The language item                           |
+| **Boolean**          | Whether this language is currently selected |
+| **onSelectLanguage** | Callback function triggered on selection    |
+
+2. **Set the Custom Layout in the Configuration**: Configure the `AperoLanguageUiConfig` to use your
+   compose
+
+```kotlin
+ val languageConfig = AperoLanguageUiConfig.Builder()
+    .setCustomLanguageItemCompose { language, selected, onSelectLanguage ->
+        LanguageItem(
+            modifier = Modifier.fillMaxWidth(),
+            language = Language.entries.find { language.code == it.code }
+                ?: Language.English,
+            selected = selected,
+            onClick = onSelectLanguage,
+        )
+    }
+    .build()
+
+```
+
+### Configure the First Open Flow:
+
+After customizing the Language Selector using Jetpack Compose or XML.
+You need to ensure your configuration is correctly set up within your
+`FirstOpenActivity`.
 
    ```kotlin
    private fun setupFirstOpenFlow() {
-       val config = AperoFOConfig.Builder()
-           .setLanguageUiConfig(languageConfig)
-           .build()
+    val config = AperoFOConfig.Builder()
+        .setLanguageUiConfig(languageConfig)
+        .build()
 
-       AperoFO.startFlow(this, config)
-   }
+    AperoFO.startFlow(this, config)
+}
    ```
-
-By following these steps, you can implement a custom layout for the language element in the Language
-First Open screen, giving you greater control over the visual appearance and functionality.
 
 # [**4. Configure Welcome screen (Optional)**](#4-configure-welcome-screen-optional)
 
@@ -322,6 +365,19 @@ This step setups Welcome screen (screen between Language FO and Onboard).
 - Upon an event that complete welcome screen, call ``AperoFO.completeWelcomeScreen()``
 
 Full config options: [Documentation](docs/WelcomeConfigOptions.md)
+
+Configure the `AperoWelcomeUiConfig` to use your custom your UI.
+
+| Parameter               | Description                                           |
+|-------------------------|-------------------------------------------------------|
+| **primaryColor**        | Sets the primary color of the elements on screen.     |
+| **viewContentProvider** | Sets a custom layout with xml resource ID             |
+| **composableContent**   | Sets a custom screen with jetpack compose             |
+| **backgroundColor**     | Sets the screen background using a color.             |
+| **backgroundBrush**     | Sets the screen background using a brush.             |
+| **backgroundImage**     | Sets the screen background using a drawable resource. |
+
+`Note: If you use all: backgroundImage, backgroundBrush, backgroundColor. Thay will be applied in the following order: backgroundImage > backgroundBrush > backgroundColor`
 
 ### Using XML:
 
@@ -334,7 +390,6 @@ To use an image as background like the following photo:
 <img src="./photo/photo_3.png" height="400" />
 </p>
 
-Use `setCustomImageBackground(R.drawable.your_background)` in the welcomeConfig setup. Ensure the Welcome XML does not include android:background="@drawable/your_background.
 Otherwise, welcome screen has its content as the following layout below:
 
 <p align="center">
@@ -343,19 +398,17 @@ Otherwise, welcome screen has its content as the following layout below:
 
 ```kotlin
 private fun setupFirstOpenFlow() {
-   //...
-   val welcomeConfig = AperoWelcomeUiConfig.Builder()
-      .setCustomImageBackground(R.drawable.img_language_background) // for using a image as background. Now, xml layout no longer include "android:background="@drawable/img_custom_language_background"
-      .setViewContentProvider { setUpWelcomeScreen() }
-      .build()
-
-   //...
+    //...
+    val welcomeConfig = AperoWelcomeUiConfig.Builder()
+        .setViewContentProvider { setUpWelcomeScreen() }
+        .build()
+    //...
 }
 
 private fun setUpWelcomeScreen(): View {
-   val welcomeScreenView = layoutInflater.inflate(R.layout.layout_welcome_scr, null, false)
-   // Setup your welcome screen layout here
-   return welcomeScreenView
+    val welcomeScreenView = layoutInflater.inflate(R.layout.layout_welcome_scr, null, false)
+    // Setup your welcome screen layout here
+    return welcomeScreenView
 }
 ```
 
@@ -366,16 +419,16 @@ file [Source file](app/src/main/java/apero/aperosg/monetizationsample/FirstOpenW
 
 ```kotlin
 private fun setupFirstOpenFlow() {
-   //...
-   val welcomeConfig = AperoWelcomeUiConfig.Builder()
-      .setComposableContent { WelcomeScreenContent() }
-      .build()
-   //...
+    //...
+    val welcomeConfig = AperoWelcomeUiConfig.Builder()
+        .setComposableContent { WelcomeScreenContent() }
+        .build()
+    //...
 }
 
 @Composable
 private fun WelcomeScreenContent() {
-   // Set up your welcome screen layout here
+    // Set up your welcome screen layout here
 }
 ```
 
@@ -384,151 +437,24 @@ private fun WelcomeScreenContent() {
 Full config options: [Documentation](docs/OnboardConfigOptions.md)
 
 <details>
-    <summary>Onboard screens with only one native onboard fullscreen</summary>
-
-### Step 1: Create Onboarding Page Configurations
-
-Start by defining three **AperoOnboardPageConfig** objects, one for each onboarding screen. Ensure
-these configurations are created in the order you
-want them to appear: 1, 2, 3.
-
-```kotlin
-val onboard1Config = AperoOnboardPageConfig()
-val onboard2Config = AperoOnboardPageConfig()
-val onboard3Config = AperoOnboardPageConfig()
-```
-
-### Step 2: Add UI Content to Each Onboarding Page
-
-To customize the UI for each onboarding screen, you can assign a layout resource ID or a Composable
-function to the corresponding *
-*AperoOnboardPageConfig** object.
-
-### Using XML Layouts
-
-If your onboarding screens are defined using XML layouts, simply assign the layout resource ID to
-each  **AperoOnboardPageConfig** object.
-
-```kotlin
-val onboard1Config = AperoOnboardPageConfig(layoutOnboardContentId = R.layout.layout_onboard_1)
-val onboard2Config = AperoOnboardPageConfig(layoutOnboardContentId = R.layout.layout_onboard_2)
-val onboard3Config = AperoOnboardPageConfig(layoutOnboardContentId = R.layout.layout_onboard_3)
-```
-
-### Using Jetpack Compose
-
-If you prefer to define your onboarding screens with Jetpack Compose, you can pass a Composable
-function directly to each **AperoOnboardPageConfig**
-object:
-
-```kotlin
-val onboard1Config = AperoOnboardPageConfig(composableContent = { OnboardScreen1Compose() })
-val onboard2Config = AperoOnboardPageConfig(composableContent = { OnboardScreen2Compose() })
-val onboard3Config = AperoOnboardPageConfig(composableContent = { OnboardScreen3Compose() })
-```
-
-### Step 3: Configure the Onboarding UI
-
-Create an AperoOnboardUiConfig object to customize the appearance of the onboarding screens. Pass
-the previously created **AperoOnboardPageConfig**
-objects into this configuration.
-
-| Parameter           | Description                                                                             |
-|---------------------|-----------------------------------------------------------------------------------------|
-| **primaryColor**    | Color of the elements on onboarding screen such as indicators, next button, ads buttons |
-| **backgroundColor** | Background color of the onboarding screen                                               |
-
-```kotlin
-val onboardConfig = AperoOnboardUiConfig(
-   primaryColor = yourPrimaryColor,
-   backgroundColor = yourBackgroundColor,
-   pagesConfig = listOf(onboard1Config, onboard2Config, onboard3Config)
-)
-```
-
-### Configure Ads
-
-First Open library takes care of showing splash ads and first open ads, to do that you have to
-provide the ads id.
-
-Full config options: [Documentation](docs/AdsConfigOptions.md)
-
-Example:
-
-```kotlin
-// Set up ads config
-val adsConfig = AperoFOAdsConfig.Builder()
-   .setInterSplashHighId(BuildConfig.inter_splash_high)
-   .setInterSplashId(BuildConfig.inter_splash)
-   // More ads id
-   .build()
-```
-
-### Start flow
-
-After configuring everything, it's time to assemble configs and start the flow
-
-```kotlin
-// Assemble configs
-val config = AperoFOConfig.Builder()
-   .setCallback(callback)
-   .setAdsConfig(adsConfig)
-   .setSplashUiConfig(splashConfig)
-   .setLanguageUiConfig(languageConfig)
-   .setWelcomeUiConfig(welcomeConfig)
-   .setOnboardUiConfig(onboardConfig)
-   .build()
-
-// Start first open flow
-AperoSGFO.startFlow(this, config)
-```
-
-</details>
-
-<details>
     <summary>Onboard screens with two native onboard fullscreen</summary>
 
 ### Step 1: Firebase Configuration for Onboard Screens
 
-To ensure, your application displays two native onboard fullscreen advertisements, follow these
-steps:
-
-1. <b>Open your Firebase project.</b>
-
-2. <b>Add a key named `enable_two_native_onboard_fullscreen` and set its default value to true</b>
-
-<b>Advertisement Order for Onboard Screens</b>
-
-When `enable_two_native_onboard_fullscreen` is set to `true`, the order of advertisements will be:
+The onboarding are following with flow:
 
 1. Start
 2. Splash
 3. Language First Open
-4. Welcome (optional)
-5. Onboard 1
-6. <b>Native Onboard Fullscreen 1</b>
-7. Onboard 2
-8. <b>Native Onboard Fullscreen 2</b>
-9. Onboard 3
-10. Onboard 4 (optional)
-11. Finish
-
-<b>Handling Internet Issues</b>
-
-If there is an issue with the Internet, the Remote Config will set
-`enable_two_native_onboard_fullscreen` to `false` by default. In this case, only Native Onboard
-Fullscreen 1 will be shown. The order of advertisements will be:
-
-1. Start
-2. Splash
-3. Language First Open
-4. Welcome (optional)
-5. Onboard 1
-6. Onboard 2
-7. <b>Native Onboard Fullscreen 1</b>
-8. Onboard 3
-9. Onboard 4 (optional)
-10. Finish
+4. Language First Open dup
+5. Onboard 1 (with native ad)
+6. Native Onboard Fullscreen 1
+7. Onboard 2 (with banner ad)
+8. Native Onboard Fullscreen 2
+9. Onboard 3 (with banner ad)
+10. Welcome
+11. Welcome dup
+12. Finish
 
 On the section [configure ad](#configure-ads), take a notice when set
 up `native_onboard_1_fullscreen` & `native_onboard_2_fullscreen`
@@ -580,22 +506,117 @@ Create an AperoOnboardUiConfig object to customize the appearance of the onboard
 the previously created **AperoOnboardPageConfig**
 objects into this configuration.
 
-| Parameter            | Description                                                                             |
-|----------------------|-----------------------------------------------------------------------------------------|
-| **primaryColor**     | Color of the elements on onboarding screen such as indicators, next button, ads buttons |
-| **backgroundColor**  | Background color of the onboarding screen                                               |
-| **nextButtonStyle**  | Style of next button, either Normal, Solid or Outline                                   |
-| **startButtonStyle** | Style of start button, either Normal, Solid or Outline                                  |
+| Parameter           | Description                                                                             |
+|---------------------|-----------------------------------------------------------------------------------------|
+| **primaryColor**    | Color of the elements on onboarding screen such as indicators, next button, ads buttons |
+| **pages**           | A list of `AperoOnboardPageConfig`. It should contain 3 items.                          |
+| **backgroundColor** | Sets the screen background using a color.                                               |
+| **backgroundBrush** | Sets the screen background using a brush.                                               |
+| **backgroundImage** | Sets the screen background using a drawable resource.                                   |
+
+`Note: If you use all: backgroundImage, backgroundBrush, backgroundColor. Thay will be applied in the following order: backgroundImage > backgroundBrush > backgroundColor`
 
 ```kotlin
 val onboardConfig = AperoOnboardUiConfig(
-   primaryColor = yourPrimaryColor,
-   backgroundColor = yourBackgroundColor,
-   pagesConfig = listOf(onboard1Config, onboard2Config, onboard3Config)
+    primaryColor = yourPrimaryColor,
+    backgroundColor = yourBackgroundColor,
+    pagesConfig = listOf(onboard1Config, onboard2Config, onboard3Config)
 )
 ```
 
-## Configure Ads
+</details>
+
+To use linear gradient in Onboard serial screens, we provide background gradient property. Remember,
+background gradient requires at least two colours to work properly.
+
+   ```kotlin
+   val onboardConfig = AperoOnboardUiConfig(
+    startButtonStyle = ButtonStyle.Outline,
+    pages = listOf(onboard1Config, onboard2Config, onboard3Config, onboard4Config),
+    nextButtonStyle = ButtonStyle.Normal,
+    backgroundColor = 0xFF0F0F27,
+    backgroundGradient = listOf(
+        // at lease 2 colours. Otherwise, throw exceptions
+        0xFF0F0F27,
+        0xFF0F0F26,
+        0xFF0F1129,
+        0xFF1A244B,
+    ),
+    primaryColor = 0xFF27B8CD,
+)
+   ```
+
+`Note: If both backgroundColor & backgroundGradient are filled with colours. Background gradient will be used instead of background color`
+
+# [**6. Customize Ads**](#6-customize-ads)
+
+### Native ads customization
+
+You can customize Native ad elements using AperoNativeAdUiConfig() with:
+
+| Function            | Description                                            |
+|---------------------|--------------------------------------------------------|
+| **adTagColor**      | Sets the background color of all ad tag in native ads  |
+| **backgroundAd**    | Sets the background color of all standard native ads   |
+| **headlineColor**   | Sets the headline text color of all native ads         |
+| **bodyColor**       | Sets the body text color of all native ads             |
+| **buttonColor**     | Sets the background color of all call-to-action button |
+| **buttonTextColor** | Sets the text color of the call-to-action button       |
+| **adFullScrColor**  | Sets the background color of full-screen native ads    |
+| **adFullScrBrush**  | Sets the brush background of full-screen native ads    |
+
+For example:
+
+```kotlin
+val config = AperoFOConfig.Builder()
+    // Other configs
+    .setAdUiConfig(
+        AperoNativeAdUiConfig(
+            adTagColor = Color.Blue,
+            backgroundAd = Color(0xFFEAF1FF),
+            headlineColor = Color(0xFF333333),
+            bodyColor = Color.Black,
+            buttonTextColor = Color.White,
+            buttonColor = Color.Red,
+            adFullScrColor = Color.White,
+            adFullScrBrush = Brush.verticalGradient(listOf(Color.Red, Color.Yellow)),
+        )
+    )
+    .build()
+```
+
+`Note: If both adFullScrColor & adFullScrBrush are set. adFullScrBrush will be used instead of adFullScrColor`
+
+### Set the gradient background for the Native ad's CTA.
+
+You need to create `sdk_bg_cta_native.xml` in the res/drawable folder, and in
+`AperoNativeAdUiConfig`,
+set `buttonColor` to null.
+
+For example: sdk_bg_cta_native.xml
+
+```xml 
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <corners android:radius="14dp" />
+
+    <gradient android:angle="0" android:endColor="#53F5FF" android:startColor="#835BFF" />
+</shape>
+
+```
+
+```kotlin
+val config = AperoFOConfig.Builder()
+    // Other configs
+    .setAdUiConfig(
+        AperoNativeAdUiConfig(
+            buttonColor = null,
+        )
+    )
+    .build()
+```
+
+# [**7. Configure Ads**](#7-configure-ads)
 
 First Open library takes care of showing splash ads and first open ads, to do that you have to
 provide the ads id.
@@ -607,87 +628,52 @@ Example:
 ```kotlin
 // Set up ads config
 val adsConfig = AperoFOAdsConfig.Builder()
-   .setInterSplashHighId(BuildConfig.inter_splash_high)
-   .setInterSplashId(BuildConfig.inter_splash)
-   // More ads id
-   .setNativeOnboardFullscreenId(BuildConfig.native_ob_fullscr) // set up native_onboard_1_fullscreen
-   .setNativeOnboardFullscreenHighId(BuildConfig.native_ob_fullscr_high)
-   .setNativeOnboardFullscreen2Id(BuildConfig.native_ob_fullscr_2) // set up native_onboard_2_fullscreen
-   .setNativeOnboardFullscreen2HighId(BuildConfig.native_ob_fullscr_2_high)
-   .build()
+    .setInterSplashHighId(BuildConfig.inter_splash_high)
+    .setInterSplashId(BuildConfig.inter_splash)
+    // More ads id
+    .setNativeOnboardFullscreenId(BuildConfig.native_ob_fullscr) // set up native_onboard_1_fullscreen
+    .setNativeOnboardFullscreenHighId(BuildConfig.native_ob_fullscr_high)
+    .setNativeOnboardFullscreen2Id(BuildConfig.native_ob_fullscr_2) // set up native_onboard_2_fullscreen
+    .setNativeOnboardFullscreen2HighId(BuildConfig.native_ob_fullscr_2_high)
+    .build()
 ```
 
-### Start flow
+# [**8. Start flow**](#8-start-flow)
 
 After configuring everything, it's time to assemble configs and start the flow
 
 ```kotlin
 // Assemble configs
 val config = AperoFOConfig.Builder()
-   .setCallback(callback)
-   .setAdsConfig(adsConfig)
-   .setSplashUiConfig(splashConfig)
-   .setLanguageUiConfig(languageConfig)
-   .setWelcomeUiConfig(welcomeConfig)
-   .setOnboardUiConfig(onboardConfig)
-   .build()
+    .setCallback(callback)
+    .setAdsConfig(adsConfig)
+    .setAdUiConfig(adUiConfig)
+    .setSplashUiConfig(splashConfig)
+    .setLanguageUiConfig(languageConfig)
+    .setWelcomeUiConfig(welcomeConfig)
+    .setOnboardUiConfig(onboardConfig)
+    .build()
 
 // Start first open flow
 AperoSGFO.startFlow(this, config)
 ```
 
-</details>
+[//]: # ()
 
-To use linear gradient in Onboard serial screens, we provide background gradient property. Remember,
-background gradient requires at least two colours to work properly.
+[//]: # (# [**7. Publish**]&#40;#7-publish&#41;)
 
-   ```kotlin
-   val onboardConfig = AperoOnboardUiConfig(
-   startButtonStyle = ButtonStyle.Outline,
-   pages = listOf(onboard1Config, onboard2Config, onboard3Config, onboard4Config),
-   nextButtonStyle = ButtonStyle.Normal,
-   backgroundColor = 0xFF0F0F27,
-   backgroundGradient = listOf(
-      // at lease 2 colours. Otherwise, throw exceptions
-      0xFF0F0F27,
-      0xFF0F0F26,
-      0xFF0F1129,
-      0xFF1A244B,
-   ),
-   primaryColor = 0xFF27B8CD,
-)
-   ```
+[//]: # ()
 
-`Note: If both backgroundColor & backgroundGradient are filled with colours. Background gradient will be used instead of background color`
+[//]: # (To publish a new version of the library, you need to follow these steps:)
 
-# [**6. Customization**](#6-customization)
+[//]: # ()
 
-### Ads layout customization
+[//]: # (Open Android Studio -> File -> Setting -> Experimental -> Check "Configure all Gradle tasks during)
 
-If no ads layout are provided, the library use default layout. To provide custom layouts, call
-Builder functions:
+[//]: # (Gradle Sync")
 
-| Function                                         | Description                                          |
-|--------------------------------------------------|------------------------------------------------------|
-| **setCustomNativeLanguageLayoutId**              | Set custom layout for native language and dup        |
-| **setCustomNativeLanguageMetaLayoutId**          | Set custom meta layout for native language and dup   |
-| **customNativeWelcomeLayoutId**                  | Set custom layout for native welcome and dup         |
-| **customNativeWelcomeMetaLayoutId**              | Set custom meta layout for native welcome and dup    |
-| **setCustomNativeOnboardLayoutId**               | Set custom layout for native onboard                 |
-| **setCustomNativeOnboardMetaLayoutId**           | Set custom meta layout for native onboard            |
-| **setCustomNativeOnboardFullscreenLayoutId**     | Set custom layout for native onboard fullscreen      |
-| **setCustomNativeOnboardFullscreenMetaLayoutId** | Set custom meta layout for native onboard fullscreen |
+[//]: # ()
 
-For example:
+[//]: # (Then, you can publish your library by choose Gradle icon &#40;Elephant icon&#41; -> AperoSG First Open ->)
 
-```kotlin
-val config = AperoSGFOConfig.Builder()
-   // Other configs
-
-   .setCustomNativeOnboardLayoutId(R.layout.ad_native_onboard_custom)
-   .setCustomNativeOnboardMetaLayoutId(R.layout.ad_native_onboard_meta_custom)
-   .setCustomNativeOnboardFullscreenLayoutId(R.layout.ad_native_onboard_fullscreen_custom)
-   .setCustomNativeOnboardFullscreenMetaLayoutId(R.layout.ad_native_onboard_fullscreen_custom)
-
-   .build()
-```
+[//]: # (firstopen -> publishing -> publish )

@@ -12,6 +12,16 @@ val splashConfig = AperoSplashUiConfig.Builder()
     
     // Custom splash screen layout, will ignore all app icon configs if provided
     .setCustomSplashLayoutId(R.layout.layout_splash)
+    // Using Jetpack compose
+    .setCustomLanguageItemCompose { language, selected, onSelectLanguage ->
+        LanguageItem(
+            modifier = Modifier.fillMaxWidth(),
+            language = AppLanguage.entries.find { language.code == it.code }
+                ?: AppLanguage.English,
+            selected = selected,
+            onClick = onSelectLanguage,
+        )
+    }
     
     // Set true to wait for other initializations in app such as remote config, api...
     // After initialization done, call AperoFO.finishSplashInitialization() to continue splash
