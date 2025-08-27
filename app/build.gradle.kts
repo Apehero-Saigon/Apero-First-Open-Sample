@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace = "apero.aperosg.monetizationsample"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "apero.aperosg.monetizationsample"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -52,6 +52,7 @@ android {
             manifestPlaceholders["ad_app_id"] = "ca-app-pub-3940256099942544~3347511713"
             buildConfigField("String", "inter_splash", testInterId)
             buildConfigField("String", "inter_splash_high", testInterId)
+            buildConfigField("String", "inter_splash_high_2", testInterId)
             buildConfigField("String", "banner_splash", testBannerId)
 
             buildConfigField("String", "native_language", testNativeId)
@@ -66,18 +67,15 @@ android {
 
             buildConfigField("String", "native_onboard_1", testNativeId)
             buildConfigField("String", "native_onboard_1_high", testNativeId)
-            buildConfigField("String", "native_onboard_3", testNativeId)
-            buildConfigField("String", "native_onboard_3_high", testNativeId)
-            buildConfigField("String", "native_onboard_4", testNativeId)
-            buildConfigField("String", "native_onboard_4_high", testNativeId)
 
             buildConfigField("String", "native_ob_fullscr", testNativeId)
-            buildConfigField("String", "native_ob_fullscr_medium", testNativeId)
             buildConfigField("String", "native_ob_fullscr_high", testNativeId)
 
             buildConfigField("String", "native_ob_fullscr_2", testNativeId)
-            buildConfigField("String", "native_ob_fullscr_2_medium", testNativeId)
             buildConfigField("String", "native_ob_fullscr_2_high", testNativeId)
+
+            buildConfigField("String", "banner_ob", testBannerId)
+            buildConfigField("String", "inter_start", testInterId)
 
             buildConfigField("Boolean", "dev", "true")
         }
@@ -86,6 +84,7 @@ android {
             manifestPlaceholders["ad_app_id"] = "ca-app-pub-3940256099942544~3347511713" // TODO: replace with real app id
             buildConfigField("String", "inter_splash", testInterId) // TODO: replace with real ad id
             buildConfigField("String", "inter_splash_high", testInterId) // TODO: replace with real ad id
+            buildConfigField("String", "inter_splash_high_2", testInterId) // TODO: replace with real ad id
             buildConfigField("String", "banner_splash", testBannerId) // TODO: replace with real ad id
 
             buildConfigField("String", "native_language", testNativeId) // TODO: replace with real ad id
@@ -101,13 +100,13 @@ android {
             buildConfigField("String", "native_onboard_1", testNativeId) // TODO: replace with real ad id
             buildConfigField("String", "native_onboard_1_high", testNativeId) // TODO: replace with real ad id
 
-            buildConfigField("String", "native_onboard_3", testNativeId) // TODO: replace with real ad id
-            buildConfigField("String", "native_onboard_3_high", testNativeId) // TODO: replace with real ad id
-            buildConfigField("String", "native_onboard_4", testNativeId)
-            buildConfigField("String", "native_onboard_4_high", testNativeId)
-
             buildConfigField("String", "native_ob_fullscr", testNativeId) // TODO: replace with real ad id
             buildConfigField("String", "native_ob_fullscr_high", testNativeId) // TODO: replace with real ad id
+            buildConfigField("String", "native_ob_fullscr_2", testNativeId)
+            buildConfigField("String", "native_ob_fullscr_2_high", testNativeId)
+
+            buildConfigField("String", "banner_ob", testBannerId) // TODO: replace with real ad id
+            buildConfigField("String", "inter_start", testInterId) // TODO: replace with real ad id
 
             buildConfigField("Boolean", "dev", "false")
         }
@@ -115,7 +114,7 @@ android {
 }
 
 dependencies {
-    implementation("apero.aperosg.firstopen:firstopen:1.0.8")
+    implementation("apero.aperosg.astronex:firstopen:1.0.1-alpha02")
 
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.4")

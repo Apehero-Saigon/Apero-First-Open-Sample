@@ -8,19 +8,21 @@ import android.view.View
 import android.widget.CheckBox
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import apero.aperosg.firstopen.app.AperoFO
-import apero.aperosg.firstopen.app.AperoFOAdsConfig
-import apero.aperosg.firstopen.app.AperoFOCallback
-import apero.aperosg.firstopen.app.AperoFOConfig
-import apero.aperosg.firstopen.app.AperoLanguageUiConfig
-import apero.aperosg.firstopen.app.AperoOnboardPageConfig
-import apero.aperosg.firstopen.app.AperoOnboardUiConfig
-import apero.aperosg.firstopen.app.AperoSplashUiConfig
-import apero.aperosg.firstopen.app.AperoWelcomeUiConfig
-import apero.aperosg.firstopen.model.Language
+import com.astronex.firstopen.app.ButtonStyle
+import com.astronex.firstopen.app.ButtonUIConfig
+import com.astronex.firstopen.app.FOAdsConfig
+import com.astronex.firstopen.model.Language
+import com.astronex.firstopen.app.FOCallback
+import com.astronex.firstopen.app.FOConfig
+import com.astronex.firstopen.app.FOManager
+import com.astronex.firstopen.app.LanguageUiConfig
+import com.astronex.firstopen.app.OnboardPageConfig
+import com.astronex.firstopen.app.OnboardUiConfig
+import com.astronex.firstopen.app.SplashUiConfig
+import com.astronex.firstopen.app.WelcomeUiConfig
 import java.util.Locale
 
-class FirstOpenWelcomeXMLActivity: AppCompatActivity() {
+class NoneComposableFirstOpenActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,26 +31,32 @@ class FirstOpenWelcomeXMLActivity: AppCompatActivity() {
     }
 
     private fun setupFirstOpenFlow() {
-        val callback = object : AperoFOCallback() {
+        val callback = object : FOCallback() {
             override fun onConsentResult(canLoadAds: Boolean) {
                 // Do something if user consent/doesn't consent
+                // Disable ads here if user doesn't consent
             }
 
             override fun onLanguageConfirm(language: Language) {
                 // Do something when user confirm language
             }
 
+            override fun onOnboardPageChanged(pageIndex: Int, pageSize: Int) {
+                // Do something when onboard page change
+            }
+
             override fun onFinished() {
                 // Go to next screen
-                startActivity((Intent(this@FirstOpenWelcomeXMLActivity, MainActivity::class.java)))
+                startActivity((Intent(this@NoneComposableFirstOpenActivity, MainActivity::class.java)))
                 finish()
             }
         }
 
         // Set up ads config
-        val adsConfig = AperoFOAdsConfig.Builder()
+        val adsConfig = FOAdsConfig.Builder()
             // Set inter splash ads
             .setInterSplashHighId(BuildConfig.inter_splash_high)
+            .setInterSplashHigh2Id(BuildConfig.inter_splash_high_2)
             .setInterSplashId(BuildConfig.inter_splash)
             // Set banner splash
             .setBannerSplashId(BuildConfig.banner_splash)
@@ -67,21 +75,23 @@ class FirstOpenWelcomeXMLActivity: AppCompatActivity() {
             // Set native onboard
             .setNativeOnboard1HighId(BuildConfig.native_onboard_1_high)
             .setNativeOnboard1Id(BuildConfig.native_onboard_1)
-            .setNativeOnboard3HighId(BuildConfig.native_onboard_3_high)
-            .setNativeOnboard3Id(BuildConfig.native_onboard_3)
-            .setNativeOnboard4HighId(BuildConfig.native_onboard_4_high)
-            .setNativeOnboard4Id(BuildConfig.native_onboard_4)
             .setNativeOnboardFullscreenHighId(BuildConfig.native_ob_fullscr_high)
+            .setNativeOnboardFullscreenId(BuildConfig.native_ob_fullscr)
+            .setNativeOnboardFullscreen2HighId(BuildConfig.native_ob_fullscr_2_high)
+            .setNativeOnboardFullscreen2Id(BuildConfig.native_ob_fullscr_2)
+            .setBannerOnboard2Id(BuildConfig.banner_ob)
+            .setBannerOnboard3Id(BuildConfig.banner_ob)
+            .setInterStartId(BuildConfig.inter_start)
             .build()
 
         // Set up Splash screen config
-        val splashConfig = AperoSplashUiConfig.Builder()
+        val splashConfig = SplashUiConfig.Builder()
             //.setAppIconId(R.drawable.app_icon) // Uncomment this if use common splash screen
             .setCustomSplashLayoutId(R.layout.layout_splash) // Comment this if use common splash screen
             .build()
 
         // Set up Language FO screen config
-        val languageConfig = AperoLanguageUiConfig.Builder()
+        val languageConfig = LanguageUiConfig.Builder()
             .setLanguages(
                 listOf(
                     Language.English,
@@ -96,37 +106,34 @@ class FirstOpenWelcomeXMLActivity: AppCompatActivity() {
             )
             .build()
 
-        // Set up welcome screen (if exist)
-        val welcomeConfig = AperoWelcomeUiConfig.Builder()
-            .setCustomImageBackground(R.drawable.img_language_background) // for using a image as background. Now, xml layout no longer include "android:background="@drawable/img_custom_language_background"
+        // Set up Onboard screens config
+        // Config for onboard screen 1
+        val onboard1Config = OnboardPageConfig(layoutOnboardContentId = R.layout.layout_onboard_1)
+        // Config for onboard screen 2
+        val onboard2Config = OnboardPageConfig(layoutOnboardContentId = R.layout.layout_onboard_2)
+        // Config for onboard screen 3
+        val onboard3Config = OnboardPageConfig(layoutOnboardContentId = R.layout.layout_onboard_3)
+        // Combine config for onboard screens
+        val onboardConfig = OnboardUiConfig(pages = listOf(onboard1Config, onboard2Config, onboard3Config))
+
+        // Set up onboard welcome
+        val welcomeConfig = WelcomeUiConfig.Builder()
+            .setBackgroundImage(R.drawable.img_language_background) // for using a image as background. Now, xml layout no longer include "android:background="@drawable/img_custom_language_background"
             .setViewContentProvider { setUpWelcomeScreen() }
             .build()
 
-
-        // Set up Onboard screens config
-        val onboard1Config = AperoOnboardPageConfig(layoutOnboardContentId = R.layout.layout_onboard_1)
-        val onboard2Config = AperoOnboardPageConfig(layoutOnboardContentId = R.layout.layout_onboard_2)
-        val onboard3Config = AperoOnboardPageConfig(layoutOnboardContentId = R.layout.layout_onboard_3)
-        val onboard4Config = AperoOnboardPageConfig(layoutOnboardContentId = R.layout.layout_onboard_4)
-
-        val onboardConfig = AperoOnboardUiConfig(
-            pages = listOf(onboard1Config, onboard2Config, onboard3Config, onboard4Config),
-        )
-
         // Assemble configs
-        val config = AperoFOConfig.Builder()
+        val config = FOConfig.Builder()
             .setCallback(callback)
             .setAdsConfig(adsConfig)
-
             .setSplashUiConfig(splashConfig)
             .setLanguageUiConfig(languageConfig)
-            .setWelcomeUiConfig(welcomeConfig)
             .setOnboardUiConfig(onboardConfig)
-
+            .setWelcomeUiConfig(welcomeConfig)
             .build()
 
         // Start first open flow
-        AperoFO.startFlow(this, config)
+        FOManager.startFlow(this, config)
     }
 
     /** Set up custom welcome screen content
@@ -142,13 +149,13 @@ class FirstOpenWelcomeXMLActivity: AppCompatActivity() {
         checkbox.setOnClickListener {
             //------- Important ----------
             // Show welcome dup screen when user click checkbox
-            AperoFO.showWelcomeDupScreen()
+            FOManager.showWelcomeDupScreen()
             //----------------------------
         }
         nextButton.setOnClickListener {
             if (checkbox.isChecked) {
                 // Finish welcome screen and move to next screen
-                AperoFO.completeWelcomeScreen()
+                FOManager.completeWelcomeScreen()
             } else {
                 Toast.makeText(this, R.string.please_check_the_checkbox, Toast.LENGTH_SHORT).show()
             }

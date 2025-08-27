@@ -11,8 +11,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AperoSGFirstOpen"
         tools:targetApi="31">
+
+        <!--
+            EXAMPLE FOR COMPOSABLE FUNCTION
+        -->
         <activity
-            android:name="apero.aperosg.monetizationsample.FirstOpenWelcomeXMLActivity"
+            android:name="apero.aperosg.monetizationsample.FirstOpenActivity"
             android:configChanges="locale|layoutDirection|orientation|screenLayout|uiMode|touchscreen|screenSize|smallestScreenSize"
             android:exported="true">
             <intent-filter>
@@ -21,6 +25,20 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <!--
+            EXAMPLE FOR NONE COMPOSABLE FUNCTION
+        -->
+<!--        <activity-->
+<!--            android:name="apero.aperosg.monetizationsample.NoneComposableFirstOpenActivity"-->
+<!--            android:configChanges="locale|layoutDirection|orientation|screenLayout|uiMode|touchscreen|screenSize|smallestScreenSize"-->
+<!--            android:exported="true">-->
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+<!--        </activity>-->
 
         <activity
             android:name=".MainActivity"
@@ -32,11 +50,6 @@
         <meta-data
             android:name="com.google.android.gms.ads.flag.NATIVE_AD_DEBUGGER_ENABLED"
             android:value="false" />
-
-        <property
-            android:name="android.adservices.AD_SERVICES_CONFIG"
-            android:resource="@xml/gma_ad_services_config"
-            tools:replace="android:resource" />
 
         <meta-data
             android:name="com.facebook.sdk.ApplicationId"

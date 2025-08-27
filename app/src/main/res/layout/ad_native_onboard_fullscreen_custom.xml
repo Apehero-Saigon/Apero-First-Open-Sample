@@ -16,11 +16,11 @@
 
         <TextView
             android:id="@+id/ad_tag"
-            style="@style/AppTheme.Ads"
+            style="@style/Theme.AperoSGFirstOpen"
             android:background="@drawable/bg_round_5"
             android:backgroundTint="@color/blue_500"
-            android:paddingHorizontal="@dimen/_6sdp"
-            android:paddingVertical="@dimen/_1sdp"
+            android:paddingHorizontal="6dp"
+            android:paddingVertical="1dp"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -95,7 +95,7 @@
             android:layout_gravity="center"
             android:layout_marginHorizontal="16dp"
             android:layout_marginBottom="24dp"
-            android:background="@drawable/bg_round_10"
+            android:background="@color/background_ad"
             android:backgroundTint="@android:color/holo_green_light"
             android:fontFamily="@font/outfit_medium"
             android:gravity="center"
