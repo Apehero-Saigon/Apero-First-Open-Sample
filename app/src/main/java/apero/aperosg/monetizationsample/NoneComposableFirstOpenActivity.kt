@@ -56,7 +56,7 @@ class NoneComposableFirstOpenActivity : AppCompatActivity() {
         val adsConfig = FOAdsConfig.Builder()
             // Set inter splash ads
             .setInterSplashHighId(BuildConfig.inter_splash_high)
-            .setInterSplashHigh2Id(BuildConfig.inter_splash_high_2)
+//            .setInterSplashHigh2Id(BuildConfig.inter_splash_high_2)
             .setInterSplashId(BuildConfig.inter_splash)
             // Set banner splash
             .setBannerSplashId(BuildConfig.banner_splash)

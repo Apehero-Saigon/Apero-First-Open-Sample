@@ -5,6 +5,9 @@ Only use one of the setXxxContent, using both will result in undefined behaviour
 
 ```kotlin
 val welcomeConfig = AperoWelcomeUiConfig.Builder()
+    // Disable if your flow doesn't have a Welcome screen; enabled by default.
+    .disableWelcomeScreen()
+    
     // Set color of some elements on screen such as ads button
     .setPrimaryColor(yourPrimaryColor)
 

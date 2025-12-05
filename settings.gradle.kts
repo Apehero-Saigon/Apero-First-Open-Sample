@@ -28,8 +28,8 @@ dependencyResolutionManagement {
         maven {
             url = uri("https://artifactory.apero.vn/artifactory/gradle-release/")
             credentials {
-                username = ""
-                password = ""
+                username = "hoang-gentii"
+                password = "apero@123"
             }
         }
     }

@@ -3,8 +3,26 @@ First Open Library Sample
 
 This is a repository for demonstrating how to use First Open Library.
 
-First Open Library takes care of showing Splash Ads and first open flow
-(Splash -> Language -> Language dup -> Onboarding -> Welcome -> Welcome dup -> Finish)
+
+
+## This SDK Include
+
+### 1. The First Open Library handles Splash Ads and the first-open flow:
+#### Default flow:
+Splash -> Language -> Language dup -> Onboarding (3 pages + 1 fullscreen ad) -> Welcome -> Welcome dup -> Finish
+
+#### Default flow without WelcomeScreen:
+Splash -> Language -> Language dup -> Onboarding (3 pages + 1 fullscreen ad) -> Finish
+
+`Note: Using enableWelcomeScreen`
+
+#### Triple Impression flow:
+Splash -> Language -> Language dup -> Onboarding (3 pages + 2 fullscreen ad) -> Welcome -> Welcome dup -> Inter Start -> Finish
+
+`Note: Using enableTripleImpressionFlow()`
+
+### 2. [Monetization](docs/Monetization.md)
+### 3. [Google Play Subscription](docs/AppBilling.md)
 
 ## Requirements (Skip this if already done)
 
@@ -29,7 +47,7 @@ maven {
 Inside app module's build.gradle, add implementation for library:
 
 ```
-implementation("a.sg.astronex:firstopen:1.0.1")
+implementation("apero.aperosg.astronex:firstopen:3.0.0")
 ```
 
 # Table of Contents
@@ -125,8 +143,15 @@ implementation("a.sg.astronex:firstopen:1.0.1")
     
             // Assemble configs
             val config = FOConfig.Builder()
+                .setPrimaryColor(Color.Magenta)
+                /** NOTE: Only use this when requested by the Product Owner.
+                
+                .enableTripleImpressionFlow()
+   
+                 */
                 .setCallback(callback)
                 .setAdsConfig(adsConfig)
+                .setAdUiConfig(adConfig)
                 .setSplashUiConfig(splashConfig)
                 .setLanguageUiConfig(languageConfig)
                 .setWelcomeUiConfig(welcomeConfig)
@@ -173,8 +198,8 @@ If you have any other initializations that needs to be done in Splash screen suc
 follow these instructions:
 
 - Call ``.setWaitForInitialization(true)`` in SplashUiConfig Builder
-- Call ``FO.startFlow()`` to start follow as usual
-- Start your initializations and call ``FO.finishSplashInitialization()`` when you're done
+- Call ``FOManager.startFlow()`` to start follow as usual
+- Start your initializations and call ``FOManager.finishSplashInitialization()`` when you're done
 
 Sample
 file: [Source file](app/src/main/java//sg/monetizationsample/FirstOpenWithSplashInitializationActivity.kt)
@@ -204,6 +229,18 @@ Configure the `LanguageUiConfig` to use your custom your UI.
 `Note: If you use all: backgroundImage, backgroundBrush, backgroundColor. Thay will be applied in the following order: backgroundImage > backgroundBrush > backgroundColor`
 
 Full config options: [Documentation](docs/LanguageConfigOptions.md)
+
+### Using Kotlin Data Class
+
+```kotlin
+val languageConfig = LanguageUiConfig(
+    languages = listOf(
+        Language.English,
+        Language.German,
+        // Other languages
+    )
+)
+```
 
 ```kotlin
 val languageConfig = LanguageUiConfig.Builder()
@@ -237,7 +274,7 @@ startActivity(Intent(context, LanguageSettingsActivity::class.java))
 ```
 
 You can also use your custom **Language Settings** screen but
-call ``FO.setLanguage(languageCode)`` if you change language.
+call ``FOManager.setLanguage(languageCode)`` if you change language.
 
 ### Customize Language Selector with XML
 
@@ -350,7 +387,7 @@ You need to ensure your configuration is correctly set up within your
         .setLanguageUiConfig(languageConfig)
         .build()
 
-    FO.startFlow(this, config)
+    FOManager.startFlow(this, config)
 }
    ```
 
@@ -358,8 +395,8 @@ You need to ensure your configuration is correctly set up within your
 
 This step setups Welcome screen (screen between Language FO and Onboard).
 
-- Upon an event that triggers dup screen, call ``FO.showWelcomeDupScreen()``
-- Upon an event that complete welcome screen, call ``FO.completeWelcomeScreen()``
+- Upon an event that triggers dup screen, call ``FOManager.showWelcomeDupScreen()``
+- Upon an event that complete welcome screen, call ``FOManager.completeWelcomeScreen()``
 
 Full config options: [Documentation](docs/WelcomeConfigOptions.md)
 
@@ -367,6 +404,7 @@ Configure the `WelcomeUiConfig` to use your custom your UI.
 
 | Parameter               | Description                                           |
 |-------------------------|-------------------------------------------------------|
+| **enableWelcomeScreen** | Disable/Enable Welcome screen in flow.                |
 | **viewContentProvider** | Sets a custom layout with xml resource ID             |
 | **composableContent**   | Sets a custom screen with jetpack compose             |
 | **backgroundColor**     | Sets the screen background using a color.             |
@@ -491,10 +529,31 @@ function directly to each **OnboardPageConfig**
 object:
 
 ```kotlin
-val onboard1Config = OnboardPageConfig(composableContent = { OnboardScreen1Compose() })
-val onboard2Config = OnboardPageConfig(composableContent = { OnboardScreen2Compose() })
-val onboard3Config = OnboardPageConfig(composableContent = { OnboardScreen3Compose() })
+val onboard1Config = OnboardPageConfig(
+    composableContent = { OnboardScreen1Compose() },
+    buttonUIConfig = ButtonUIConfig(
+        buttonTextColor = Color(0xFFEE9FFC),
+        buttonStyle = ButtonStyle.Normal,
+    ),
+)
+val onboard2Config = OnboardPageConfig(
+    composableContent = { OnboardScreen2Compose() },
+    buttonUIConfig = ButtonUIConfig(
+        buttonTextColor = Color.White,
+        buttonBgColor = Color(0xFFEE9FFC),
+        buttonStyle = ButtonStyle.FullSolid,
+    )
+)
+val onboard3Config = OnboardPageConfig(
+    composableContent = { OnboardScreen3Compose() },
+    buttonUIConfig = ButtonUIConfig(
+        buttonTextColor = Color(0xFFEE9FFC),
+        buttonStyle = ButtonStyle.Normal,
+    )
+)
 ```
+
+`Note: Remember to configure ButtonUIConfig() in your onboarding layout`
 
 ### Step 4: Configure the Onboarding UI
 
@@ -505,10 +564,9 @@ objects into this configuration.
 | Parameter                   | Description                                               |
 |-----------------------------|-----------------------------------------------------------|
 | **pages**                   | A list of `OnboardPageConfig`. It should contain 3 items. |
-| **buttonOb1Config**         | Customize the button on page 1.                           |
-| **buttonOb23Config**        | Customize the button on page 2 & 3.                       |
 | **indicationColor**         | Sets the color of indication when it is selected.         |
 | **indicationUnselectColor** | Sets the color of indication when it isnt selected.       |
+| **indicationSpacing**       | Vertical spacing between the button and the indicator.    |
 | **backgroundColor**         | Sets the screen background using a color.                 |
 | **backgroundBrush**         | Sets the screen background using a brush.                 |
 | **backgroundImage**         | Sets the screen background using a drawable resource.     |
@@ -654,7 +712,7 @@ val config = FOConfig.Builder()
     .build()
 
 // Start first open flow
-SGFO.startFlow(this, config)
+FOManager.startFlow(this, config)
 ```
 
 [//]: # ()

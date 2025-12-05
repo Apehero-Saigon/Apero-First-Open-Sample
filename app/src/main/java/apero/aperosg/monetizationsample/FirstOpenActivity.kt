@@ -59,7 +59,7 @@ class FirstOpenActivity : AppCompatActivity() {
         val adsConfig = FOAdsConfig.Builder()
             // Set inter splash ads
             .setInterSplashHighId(BuildConfig.inter_splash_high)
-            .setInterSplashHigh2Id(BuildConfig.inter_splash_high_2)
+//            .setInterSplashHigh2Id(BuildConfig.inter_splash_high_2)
             .setInterSplashId(BuildConfig.inter_splash)
             // Set banner splash
             .setBannerSplashId(BuildConfig.banner_splash)
@@ -136,16 +136,16 @@ class FirstOpenActivity : AppCompatActivity() {
                 onboard2Config,
                 onboard3Config,
             ),
-            buttonOb1Config = ButtonUIConfig(
-                buttonStyle = ButtonStyle.Tick,
-                buttonTextColor = Color.Red,
-                buttonBgColor = Color.Blue,
-            ),
-            buttonOb23Config = ButtonUIConfig(
-                buttonStyle = ButtonStyle.FullSolid,
-                buttonTextColor = Color.Red,
-                buttonBgColor = Color.Blue,
-            ),
+//            buttonOb1Config = ButtonUIConfig(
+//                buttonStyle = ButtonStyle.Tick,
+//                buttonTextColor = Color.Red,
+//                buttonBgColor = Color.Blue,
+//            ),
+//            buttonOb23Config = ButtonUIConfig(
+//                buttonStyle = ButtonStyle.FullSolid,
+//                buttonTextColor = Color.Red,
+//                buttonBgColor = Color.Blue,
+//            ),
             indicationColor = Color.Magenta,
             indicationUnselectColor = Color.Cyan,
             backgroundImage = R.drawable.img_language_background,
