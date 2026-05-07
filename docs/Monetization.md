@@ -1,5 +1,4 @@
-Monetization Sample
-==================
+# Monetization Sample
 
 **Advertisements made easy**
 
@@ -10,21 +9,21 @@ Apero Monetization Library makes it easy to implement multi-floors ads, to load/
 
 ### Add Kotlin to project: [Android Documentation](https://developer.android.com/kotlin/add-kotlin#add)
 
-# Table of Contents
+## Table of Contents
 
 1. [Ads structure](#ads-structure)
 2. [Declare ads](#declare-ads)
-2. [Load and show ads](#load-and-show-ads)
-2. [Turn on/off ads with config](#turn-onoff-ads-with-config)
-3. [Debug with ads log](#debug-with-ads-log)
-4. [Advanced topics](#advance-topics)
+3. [Load and show ads](#load-and-show-ads)
+4. [Turn on/off ads with config](#turn-onoff-ads-with-config)
+5. [Debug with ads log](#debug-with-ads-log)
+6. [Advanced topics](#advanced-topics)
 
 ## Ads structure
 
 Ads inside library are packaged into **AdObject** and **AdGroup**
 
 - An **AdObject** (which is tied to an ad id) is a part of an **AdGroup**
-- An **AdGroup** is a set of multiple **AdObject** with different eCPM floors, sorted from high floor &rarr; medium floor &rarr; all price. When
+- An **AdGroup** is a set of multiple **AdObject** with different eCPM floors, sorted from high floor to medium floor to all price. When
   loading and showing ads, **AdGroup** will prioritize higher floors first.
 
 All ads are written so that it can handle if developers request ads **many times without showing them**.
@@ -35,13 +34,14 @@ This means if previous ads hasn't been shown, no requests for new ads will be ma
 All ads objects inside the app are stored in a singleton class which lives as long as application lives.
 This helps avoid ads objects being cleared if it hasn't been shown.
 
-### Create a Kotlin singleton object in your project, name it ``AdsProvider``
+### Create a Kotlin singleton object in your project, name it `AdsProvider`
 
-### Start declaring your ads inside ``AdsProvider``
+### Start declaring your ads inside `AdsProvider`
 
-Every **AdGroup** has two common parameters: ``pairs of ads id and its name`` and ``the name of AdGroup``.
-The number of ``pairs of ads id and its name`` is the number of floors, ordered by priority.
-The ``name of AdGroup`` is useful for debugging.
+Every **AdGroup** has two common parameters: `pairs of ads id and its name` and
+`the name of AdGroup`.
+The number of `pairs of ads id and its name` is the number of floors, ordered by priority.
+The `name of AdGroup` is useful for debugging.
 For example:
 
 ```kotlin
@@ -120,14 +120,14 @@ In the example above, we have a native ad in Language screen which has 3 floors.
 
 ## Load and show ads
 
-1. [Implementation in Kotlin](./docs/KotlinImplementation.md)
-2. [Implementation in Java](./docs/JavaImplementation.md)
+1. [Implementation in Kotlin](KotlinImplementation.md)
+2. [Implementation in Java](JavaImplementation.md)
 
 ## Turn on/off ads with config
 
-- Every **AdGroup** have a common function ``.config()``, it receives a number of boolean parameters equals to the number of floors of that **AdGroup
-  **.
-- If an **AdUnit** floor is turned off, any calls to ``loadAds()`` and ``showAds()`` will be ignored.
+- Every **AdGroup** has a common function `.config()`. It receives a number of boolean parameters
+  equal to the number of floors of that **AdGroup**.
+- If an **AdUnit** floor is turned off, any calls to `loadAds()` and `showAds()` will be ignored.
 - An **AdGroup** is disabled if all its **AdUnit** are disabled.
 - Number of parameters matters, the number of parameters must match the number of floors. Otherwise the app will crash.
 - Order matters, the order must be the same as when we declare the ads.
@@ -148,7 +148,8 @@ class AdsProvider {
 AdsProvider.nativeLanguage.config(false, true, false)
 ```
 
-The above code will do the following things: turn off ``native_language_high``, turn on ``native_language_medium``, turn off ``native_language``.
+The above code turns off `native_language_high`, turns on `native_language_medium`, and turns off
+`native_language`.
 
 ## Debug with ads log
 
@@ -180,7 +181,7 @@ onAdFailedToShow: *ad_name* *ad_id*
 onAdShown: *ad_name* *ad_id*
 ```
 
-## Advance topics
+## Advanced topics
 
-1. [Duplicate ads](./docs/AdvancedDuplicate.md)
-2. [Increase impression](./docs/AdvanceIncreaseImpression.md)
+1. [Duplicate ads](AdvancedDuplicate.md)
+2. [Increase impression](AdvanceIncreaseImpression.md)

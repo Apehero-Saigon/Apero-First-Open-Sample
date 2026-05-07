@@ -35,6 +35,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "AperoSG FO Sample"
+rootProject.name = "Astronex FO Sample"
 include(":app")
  

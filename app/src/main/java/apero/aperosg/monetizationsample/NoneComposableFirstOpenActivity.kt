@@ -2,16 +2,11 @@ package apero.aperosg.monetizationsample
 
 import android.content.ContextWrapper
 import android.content.Intent
-import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.CheckBox
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
-import com.astronex.firstopen.app.ButtonStyle
-import com.astronex.firstopen.app.ButtonUIConfig
 import com.astronex.firstopen.app.FOAdsConfig
-import com.astronex.firstopen.model.Language
 import com.astronex.firstopen.app.FOCallback
 import com.astronex.firstopen.app.FOConfig
 import com.astronex.firstopen.app.FOManager
@@ -20,17 +15,13 @@ import com.astronex.firstopen.app.OnboardPageConfig
 import com.astronex.firstopen.app.OnboardUiConfig
 import com.astronex.firstopen.app.SplashUiConfig
 import com.astronex.firstopen.app.WelcomeUiConfig
+import com.astronex.firstopen.model.Language
+import com.astronex.firstopen.ui.activity.AstronexFirstOpenActivity
 import java.util.Locale
 
-class NoneComposableFirstOpenActivity : AppCompatActivity() {
+class NoneComposableFirstOpenActivity : AstronexFirstOpenActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        setupFirstOpenFlow()
-    }
-
-    private fun setupFirstOpenFlow() {
+    override fun onSetupFOConfig(): FOConfig {
         val callback = object : FOCallback() {
             override fun onConsentResult(canLoadAds: Boolean) {
                 // Do something if user consent/doesn't consent
@@ -45,7 +36,7 @@ class NoneComposableFirstOpenActivity : AppCompatActivity() {
                 // Do something when onboard page change
             }
 
-            override fun onFinished() {
+            override fun onFinished(isFirstOpen: Boolean) {
                 // Go to next screen
                 startActivity((Intent(this@NoneComposableFirstOpenActivity, MainActivity::class.java)))
                 finish()
@@ -77,11 +68,6 @@ class NoneComposableFirstOpenActivity : AppCompatActivity() {
             .setNativeOnboard1Id(BuildConfig.native_onboard_1)
             .setNativeOnboardFullscreenHighId(BuildConfig.native_ob_fullscr_high)
             .setNativeOnboardFullscreenId(BuildConfig.native_ob_fullscr)
-            .setNativeOnboardFullscreen2HighId(BuildConfig.native_ob_fullscr_2_high)
-            .setNativeOnboardFullscreen2Id(BuildConfig.native_ob_fullscr_2)
-            .setBannerOnboard2Id(BuildConfig.banner_ob)
-            .setBannerOnboard3Id(BuildConfig.banner_ob)
-            .setInterStartId(BuildConfig.inter_start)
             .build()
 
         // Set up Splash screen config
@@ -132,8 +118,7 @@ class NoneComposableFirstOpenActivity : AppCompatActivity() {
             .setWelcomeUiConfig(welcomeConfig)
             .build()
 
-        // Start first open flow
-        FOManager.startFlow(this, config)
+        return config
     }
 
     /** Set up custom welcome screen content

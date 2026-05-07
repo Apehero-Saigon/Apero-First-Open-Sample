@@ -1,56 +1,66 @@
-### Google Play Subscription
+# Google Play Subscription
+
+## Initialize Billing
+
+Initialize your subscription list in the `Application` class.
 
 ```kotlin
+AppBilling.init(
+    context = this,
+    billingItems = yourSubscriptionList,
+    isDebug = BuildConfig.DEBUG,
+)
+```
 
-/**
- * Initialize your subscription list in the Application class.
- */
-AppBilling.init(context = this, billingItems = yourSubscriptionList, BuildConfig.DEBUG)
+## Check Premium Status
 
-/**
- *Check your premium status
- * - true: If you have purchased any IAP item
- * - We have handled turn off ads if true
- */
+`AppBilling.isPurchasedFlow` returns `true` when the user has purchased any IAP item. Ads are
+handled as off when this value is `true`.
+
+```kotlin
 AppBilling.isPurchasedFlow
+```
 
-/**
- * Get the full price of your IAP item
- */
+## Read Billing Item Information
+
+```kotlin
+// Get the full price text of an IAP item.
 AppBilling.getFullPriceText(subscription)
 
-/**
- * Check if your IAP item is available for purchase on Google Play
- */
+// Check if an IAP item is available for purchase on Google Play.
 AppBilling.isBillingItemAvailable(subscription)
+```
 
-/**
- * Get information about the IAP item that the user has successfully purchased via Google Play
- */
+## Read Purchased Items
+
+```kotlin
 AppBilling.purchasedItemMapFlow.map { map ->
     map.values.mapNotNull { billingItem ->
         val purchasedItem = billingItem.billingItem
         if (purchasedItem is SubscriptionBillingItem) {
             val billingList = listOf(
-                //your billing items list
+                // Your billing items list.
             )
-            billingList.find { it.productId == purchasedItem.productId && it.offerId == purchasedItem.offerId }
+            billingList.find {
+                it.productId == purchasedItem.productId &&
+                    it.offerId == purchasedItem.offerId
+            }
         } else {
             null
         }
     }
 }
+```
 
-/**
- * Handles the purchase of your IAP item
- * */
+## Purchase an Item
+
+```kotlin
 AppBilling.purchase(
     activity = activity,
     billingItem = billingItem,
     onFailure = onFailure,
     onSuccess = { billingItem, purchase ->
         onSuccess(billingItemInfo)
-    }
+    },
 )
-
 ```
