@@ -74,6 +74,7 @@ android {
             buildConfigField("String", "native_ob_fullscr_2", testNativeId)
             buildConfigField("String", "native_ob_fullscr_2_high", testNativeId)
 
+            buildConfigField("String", "banner_ob_high", testBannerId)
             buildConfigField("String", "banner_ob", testBannerId)
             buildConfigField("String", "inter_start", testInterId)
 
@@ -105,6 +106,7 @@ android {
             buildConfigField("String", "native_ob_fullscr_2", testNativeId)
             buildConfigField("String", "native_ob_fullscr_2_high", testNativeId)
 
+            buildConfigField("String", "banner_ob_high", testBannerId) // TODO: replace with real ad id
             buildConfigField("String", "banner_ob", testBannerId) // TODO: replace with real ad id
             buildConfigField("String", "inter_start", testInterId) // TODO: replace with real ad id
 
@@ -114,7 +116,7 @@ android {
 }
 
 dependencies {
-    implementation("apero.aperosg.astronex:firstopen:4.1.17.7")
+    implementation("apero.aperosg.astronex:firstopen:4.1.19")
 
     implementation("androidx.core:core-ktx:1.13.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.4")
